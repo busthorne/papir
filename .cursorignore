@@ -1,0 +1,7 @@
+!*.svelte
+!*.html
+!*.md
+!*.js
+!*.ts
+!*.css
+!*.scss

@@ -1,0 +1,7 @@
+{
+	"htmlWhitespaceSensitivity": "ignore",
+	"svelteStrictMode": false,
+	"svelteAllowShorthand": true,
+	"svelteBracketNewLine": false,
+	"useTabs": true
+}
