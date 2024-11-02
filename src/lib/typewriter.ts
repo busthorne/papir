@@ -1,4 +1,4 @@
-export const typewriter = (node: HTMLElement, { speed = 50 }) => {
+export const typewriter = (node: HTMLElement, { speed = 50, prefill = false }) => {
 	const targets = flattext(node);
 	if (!targets) {
 		throw new Error(`This transition only works on elements with text nodes`);
@@ -11,7 +11,7 @@ export const typewriter = (node: HTMLElement, { speed = 50 }) => {
 		const range = [totalLength, totalLength + textNode.textContent.length];
 		totalLength += textNode.textContent.length;
 		const text = textNode.textContent;
-		textNode.textContent = '';
+		textNode.textContent = prefill ? '\u00A0'.repeat(text.length) : '';
 		return { textNode, range, text };
 	});
 	let currentRangeIndex = 0;
@@ -30,8 +30,15 @@ export const typewriter = (node: HTMLElement, { speed = 50 }) => {
 			const progress = ~~(totalLength * t);
 			const { textNode, range, text } = getCurrentRange(progress);
 			const [start, end] = range;
-			const textLength = ((progress - start) / (end - start)) * text.length;
-			textNode.textContent = text.slice(0, textLength);
+			const textLength = ~~(((progress - start) / (end - start)) * text.length);
+
+			if (prefill) {
+				const filled = text.slice(0, textLength);
+				const spaces = '\u00A0'.repeat(text.length - textLength);
+				textNode.textContent = filled + spaces;
+			} else {
+				textNode.textContent = text.slice(0, textLength);
+			}
 		},
 	};
 }

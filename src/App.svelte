@@ -11,13 +11,15 @@
 	import { typewriter } from "./lib/typewriter";
 
 	import { RiShapesFill } from "svelte-remixicon";
+	import { Markdown } from "carta-md";
 
 	const empty = (role: string): Message => ({
 		role: role,
 		content: "",
 		parenthetical: "",
 	});
-	let messages = script(demo(3));
+	let pre = script(demo(3));
+	let post = script([]);
 	let tail = improv(empty("user"));
 
 	let mounted = false;
@@ -33,6 +35,34 @@
 			role == "assistant" ? assistant : user;
 	const dial1 = dial("user", "agent #1");
 	const dial2 = dial("user", "agent #2");
+
+	async function simulateTyping() {
+		await new Promise((r) => setTimeout(r, 500));
+		const words = loremIpsum("assistant").split(" ");
+		let opus = "";
+		for (let word of words) {
+			if (opus) opus += " ";
+			opus += word;
+			tail.update((p) => ({ ...p, content: opus }));
+			await new Promise((r) =>
+				setTimeout(
+					r,
+					Math.random() * 100 + (Math.random() < 0.5 ? Math.random() * 200 : 0),
+				),
+			);
+		}
+	}
+	async function send() {
+		post.append($tail);
+		tail = improv(empty("assistant"));
+		await simulateTyping();
+		post.append($tail);
+		tail = improv(empty("user"));
+		listening = false;
+	}
+	// TODO: event handler hangs the reactivity, `send` should be some kind of signal, I guess?
+	let listening = false;
+	$: if (listening) send();
 </script>
 
 {#if mounted}
@@ -41,14 +71,17 @@
 			<Scene prefix={"int."} where={"train car"} when={"future"} />
 		</div>
 		<Action value={loremIpsum("user").slice(0, -1) + "."} />
-		{#each $messages as message, i}
+		{#each $pre as message, i}
 			<Dialogue
 				role={dial1(message.role)}
 				parenthetical={message.parenthetical}
 				markdown={message.content} />
 			{#if i == 0}
 				<Action>
-					<p>The items</p>
+					<p>
+						The margin may contains artifacts, and is how users interact with
+						the environment.
+					</p>
 					<aside slot="right">
 						<p>
 							<RiShapesFill size={"24px"} />
@@ -59,7 +92,7 @@
 			{#if i == 2 && invited != false}
 				<Transition>
 					{#key invited}
-						<p in:typewriter={{ speed: 50 }}>
+						<p in:typewriter={{ speed: 50, prefill: true }}>
 							{#if invited == undefined}
 								invite <b>{dial2()}</b>
 								?
@@ -80,19 +113,35 @@
 			{/if}
 		{/each}
 		{#if invited}
-			<div in:fade={{ duration: 100 }}>
+			<div in:fade={{ duration: 200 }}>
 				<Dialogue
 					markdown={"I will be trying to perform a very complex calculation on the data—"}
 					cont>
-					<span slot="role" in:fade={{ duration: 100 }}>{dial2()}</span>
+					<span slot="role">{dial2()}</span>
 				</Dialogue>
 				<Dialogue markdown={"Processing input..."}>
 					<span slot="parenthetical">(thinking)</span>
 				</Dialogue>
 			</div>
 		{/if}
+		{#each $post as message, i}
+			<div in:fly={{ y: 20, duration: 200 }}>
+				<Dialogue
+					role={message.role}
+					markdown={message.content}
+					parenthetical={"demo"} />
+			</div>
+		{/each}
 		{#if invited !== undefined}
-			<Dialogue prompt role={"user"} markdown={$tail.content} />
+			{#key tail}
+				<div in:fade={{ duration: 200, delay: 200 }}>
+					<Dialogue
+						role={$tail.role}
+						bind:markdown={$tail.content}
+						on:shutter={() => (listening = true)}
+						prompt={!listening} />
+				</div>
+			{/key}
 		{/if}
 	</Papir>
 {/if}

@@ -45,8 +45,8 @@
 			mode={"tabs"}
 			{placeholder}
 			selectedTab={"write"}
+			textarea={{ autoFocus: prompt }}
 			disableToolbar />
-		<!-- textarea={{ autoFocus: readonly }} -->
 	{:else}
 		{#key markdown}
 			<Markdown {carta} value={markdown} />
@@ -62,11 +62,11 @@
 		box-sizing: border-box;
 		&.prompt {
 			opacity: 1;
-			// background: linear-gradient(
-			// 	to bottom,
-			// 	rgba(255, 255, 255, 0),
-			// 	rgba(0, 0, 0, 0.05)
-			// );
+			background: linear-gradient(
+				to bottom,
+				rgba(255, 255, 255, 0),
+				rgba(0, 0, 0, 0.05)
+			);
 		}
 		&::selection {
 			background: var(--selection-color);
