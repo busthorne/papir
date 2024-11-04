@@ -57,6 +57,8 @@ Please note the example is only illustrative, and the library have not been prop
 </Papir>
 ```
 
+The `Buffer` component is built from the beautiful [Carta][3]—a Markdown editor, and [Shiki][4] for syntax highlighting.  Also: note that the `Action` and `Dialogue` components are both using `Buffer` under the hood, and like most other things in papir, they may be customised using slots. I know Svelte is moving away from slots and some other things, however I'm not sure I agree with the new direction, & I would hate to break Svelte 4 compatibility regardless.
+
 ## Dramaturgy
 Much can be said about the unreasonable efficiency of dramatic writing as a UI/UX paradigm.
 
@@ -105,10 +107,18 @@ The user would be able to OK it, and the chat history would be updated according
 
 This is a very simple example of how the chat history can be compressed and decompressed, and how the environment can influence the flow of the conversation. The more sophisticated backends can offer more sophisticated queries, such as keeping a completely separate history of the chat for each participant, and so on.
 
-### Credits
+### Roadmap
+This repo is our second attempt at this idea, and we're still rewriting our internal tools to use it.
+
+We'll soon be creating a NPM package, adding some helpful stores for handling typical OpenAI-like chat histories, exposing some rudimentary apis for controlling the buffers. There's talk about establishing some design language for margin-marks, some kind of artifact library for most common use-cases, and perhaps introducing animated components for interacting with it. If you know a thing or two about [Web Components][5] and have ideas how we could package them up, we could use all the help we can get!
+
+## Credits
 Brought to you by [Busthorne][2], Ukraine's vanguard language-games lab: we do computational discourse analysis, study intelligent forms, simulations. We've been doing lots of research in computational literature recently, where the characters live in the computer, and readers are invited to play the part in a play. In the course of this research, it became clear that the chat interfaces are not the best way to interact with agents, and we believe to have figured out a much more interesting way.
 
 License: MIT
 
 [1]: https://www.youtube.com/watch?v=vUdNaAAc4FY
 [2]: https://github.com/busthorne
+[3]: https://github.com/BearToCode/carta
+[4]: https://shiki.style/
+[5]: https://developer.mozilla.org/en-US/docs/Web/API/Web_components
