@@ -1,7 +1,7 @@
 # Papir
 Playwriting as general-purpose UI/UX for multi-agent AI environments, contrary to chat interfaces.
 
-Papir is a Svelte implementation of a dramaturgy-inspired design system that reimagines chat interfaces as plays (standard screenplay formatting, in particular.) Rather than extending chat interfaces with new primitives, such as [artifacts][1], Papir starts from the inherent expressiveness of dramatic writing.
+Papir is a Svelte implementation of a dramaturgy-inspired design system that reimagines chat interfaces as plays (standard screenplay formatting, in particular.) Rather than extending chat interfaces with new primitives, such as [artifacts][1], Papir taps into into the inherent expressiveness of dramatic writing, and hundreds of years of literary tradition. We believe this is a promising avenue for human-machine interaction, and will explore it more in the future.
 
 ![](./public/train_car.png)
 
@@ -113,7 +113,7 @@ This repo is our second attempt at this idea, and we're still rewriting our inte
 We'll soon be creating a NPM package, adding some helpful stores for handling typical OpenAI-like chat histories, exposing some rudimentary apis for controlling the buffers. There's talk about establishing some design language for margin-marks, some kind of artifact library for most common use-cases, and perhaps introducing animated components for interacting with it. If you know a thing or two about [Web Components][5] and have ideas how we could package them up, we could use all the help we can get!
 
 ## Credits
-Brought to you by [Busthorne][2], Ukraine's vanguard language-games lab: we do computational discourse analysis, study intelligent forms, simulations. We've been doing lots of research in computational literature recently, where the characters live in the computer, and readers are invited to play the part in a play. In the course of this research, it became clear that the chat interfaces are not the best way to interact with agents, and we believe to have figured out a much more interesting way.
+Brought to you by [Busthorne][2], Ukraine's vanguard language-games lab: we do computational discourse analysis, study intelligent forms, simulations. We've been doing lots of research in computational literature recently, where characters live inside a computer, and the readers are invited to play their parts in some kind of play. In the course of this research, it became clear to us that chat interfaces per se are not the best way to interact with agents, and we believe to have figured out a much more interesting way.
 
 License: MIT
 
