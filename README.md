@@ -11,6 +11,7 @@ Please note the example is only illustrative, and the library have not been prop
 ```svelte
 <script lang="ts">
 	import { Papir, Dialogue, Scene, Action, Transition, Buffer } from "papir";
+	import "papir/style.css";
 	import { typewriter } from "papir/transition";
 	import { loremIpsum, demo } from "./mock";
 	let messages = demo();
