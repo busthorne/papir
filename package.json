@@ -4,22 +4,19 @@
 	"description": "Dramaturgy design system for Svelte",
 	"type": "module",
 	"files": [
-		"dist"
+		"dist/**/*"
 	],
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js",
-			"default": "./dist/index.js"
-		}
+		".": "./dist/index.js",
+		"./style.css": "./dist/style.css"
 	},
 	"svelte": "./dist/index.js",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "vite build --config vite.config.ts",
 		"preview": "vite preview",
 		"package": "svelte-package",
 		"check": "svelte-check --tsconfig ./tsconfig.json"

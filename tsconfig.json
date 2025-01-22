@@ -7,8 +7,12 @@
 		"resolveJsonModule": true,
 		"allowJs": true,
 		"checkJs": true,
-		"isolatedModules": true,
 		"moduleDetection": "force",
+		"isolatedModules": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "outDir": "./dist",
+    "emitDeclarationOnly": true,
 		"types": [
 			"svelte"
 		]
@@ -18,9 +22,5 @@
 		"src/**/*.js",
 		"src/**/*.svelte"
 	],
-	"references": [
-		{
-			"path": "./tsconfig.node.json"
-		}
-	]
+	"references": [{"path": "./tsconfig.node.json"}]
 }
