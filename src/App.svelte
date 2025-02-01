@@ -45,10 +45,7 @@
 			opus += word;
 			tail.update((p) => ({ ...p, content: opus }));
 			await new Promise((r) =>
-				setTimeout(
-					r,
-					Math.random() * 100 + (Math.random() < 0.5 ? Math.random() * 200 : 0),
-				),
+				setTimeout(r, Math.random() * 100 + (Math.random() < 0.5 ? Math.random() * 200 : 0)),
 			);
 		}
 	}
@@ -78,10 +75,7 @@
 				markdown={message.content} />
 			{#if i == 0}
 				<Action>
-					<p>
-						The margin may contains artifacts, and is how users interact with
-						the environment.
-					</p>
+					<p>The margin may contains artifacts, and is how users interact with the environment.</p>
 					<aside slot="right">
 						<p>
 							<RiShapesFill size={"24px"} />
@@ -126,10 +120,7 @@
 		{/if}
 		{#each $post as message, i}
 			<div in:fly={{ y: 20, duration: 200 }}>
-				<Dialogue
-					role={message.role}
-					markdown={message.content}
-					parenthetical={"demo"} />
+				<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
 			</div>
 		{/each}
 		{#if invited !== undefined}

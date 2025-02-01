@@ -75,13 +75,10 @@
 			border-radius: 4px;
 			// top, bottom, left, right
 			background:
-				linear-gradient(90deg, var(--border-color) 50%, transparent 50%)
-					repeat-x,
-				linear-gradient(90deg, var(--border-color) 50%, transparent 50%)
-					repeat-x 0 100%,
+				linear-gradient(90deg, var(--border-color) 50%, transparent 50%) repeat-x,
+				linear-gradient(90deg, var(--border-color) 50%, transparent 50%) repeat-x 0 100%,
 				linear-gradient(0deg, var(--border-color) 50%, transparent 50%) repeat-y,
-				linear-gradient(0deg, var(--border-color) 50%, transparent 50%) repeat-y
-					100% 0;
+				linear-gradient(0deg, var(--border-color) 50%, transparent 50%) repeat-y 100% 0;
 			background-size:
 				15px 1px,
 				15px 1px,

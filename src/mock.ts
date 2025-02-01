@@ -1,23 +1,30 @@
 export const demo = (n = 4) => {
-	return Array(n).fill(0).map((_, i) => {
-		let role = (i % 2 == 0 ? 'user' : 'assistant');
-		return {
-			role,
-			content: loremIpsum(role),
-			parenthetical: Math.random() < 0.2 ? 'agitated' : ''
-		}
-	});
-}
+	return Array(n)
+		.fill(0)
+		.map((_, i) => {
+			let role = i % 2 == 0 ? "user" : "assistant";
+			return {
+				role,
+				content: loremIpsum(role),
+				parenthetical: Math.random() < 0.2 ? "agitated" : "",
+			};
+		});
+};
 
 export const loremIpsum = (role: string) => {
 	const lorem = [
 		// Short (4-8 words)
-		"Lorem ipsum dolor sit amet", "Consectetur adipiscing elit",
-		"Sed do eiusmod tempor", "Ut labore et dolore magna aliqua",
-		"Quis nostrud exercitation", "Duis aute irure dolor",
-		"Excepteur sint occaecat", "Non proident sunt in culpa",
-		"Commodo consequat velit", "Voluptate velit esse cillum",
-		// Medium (12-15 words) 
+		"Lorem ipsum dolor sit amet",
+		"Consectetur adipiscing elit",
+		"Sed do eiusmod tempor",
+		"Ut labore et dolore magna aliqua",
+		"Quis nostrud exercitation",
+		"Duis aute irure dolor",
+		"Excepteur sint occaecat",
+		"Non proident sunt in culpa",
+		"Commodo consequat velit",
+		"Voluptate velit esse cillum",
+		// Medium (12-15 words)
 		"Nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet non",
 		"Egestas integer eget aliquet nibh praesent tristique magna sit amet purus",
 		"Elementum tempus egestas sed sed risus pretium quam vulputate dignissim suspendisse",
@@ -27,12 +34,11 @@ export const loremIpsum = (role: string) => {
 	];
 
 	const ipsum = (words_mean: number, stddev: number, paragraphs = false) => {
-		const how_many = Math.max(10, Math.round(
-			words_mean + stddev * (Math.random()
-				+ Math.random()
-				+ Math.random() - 1.5)
-		));
-		const words_at = lorem.map(s => s.split(' ').length);
+		const how_many = Math.max(
+			10,
+			Math.round(words_mean + stddev * (Math.random() + Math.random() + Math.random() - 1.5)),
+		);
+		const words_at = lorem.map((s) => s.split(" ").length);
 		let opus = [];
 		let wordcount = 0;
 		// shuffle
@@ -52,11 +58,11 @@ export const loremIpsum = (role: string) => {
 					paras[para_idx].push(word);
 					return paras;
 				}, [] as string[][])
-				.map(para => para.join('. '))
-				.map(p => String(p[0]).toUpperCase() + p.slice(1))
-				.join('.\n\n');
+				.map((para) => para.join(". "))
+				.map((p) => String(p[0]).toUpperCase() + p.slice(1))
+				.join(".\n\n");
 		}
-		return opus.join('. ');
+		return opus.join(". ");
 	};
-	return role == 'user' ? ipsum(5, 10) + '?' : ipsum(10, 20, true) + '.';
-}
+	return role == "user" ? ipsum(5, 10) + "?" : ipsum(10, 20, true) + ".";
+};

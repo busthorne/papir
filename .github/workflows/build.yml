@@ -2,31 +2,31 @@ name: Build
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Clean install
-      run: npm ci
-    
-    - name: Check
-      continue-on-error: true
-      run: npm run check
-    
-    - name: Lint
-      continue-on-error: true
-      run: npm run lint
-    
-    - name: Build
-      run: npm run build 
+      - name: Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Clean install
+        run: npm ci
+
+      - name: Check
+        continue-on-error: true
+        run: npm run check
+
+      - name: Lint
+        continue-on-error: true
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

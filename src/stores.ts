@@ -1,14 +1,14 @@
-import { writable } from 'svelte/store';
-import type { Message } from './types';
+import { writable } from "svelte/store";
+import type { Message } from "./types";
 
 const flipFlop = () => {
 	const { subscribe, set } = writable(false);
 	return {
 		subscribe,
 		start: () => set(true),
-		stop: () => set(false)
+		stop: () => set(false),
 	};
-}
+};
 export const listening = flipFlop();
 
 export const improv = (m: Message) => {
@@ -17,9 +17,9 @@ export const improv = (m: Message) => {
 		subscribe,
 		set,
 		update,
-		append: (chunk: string) => update(m => ({ ...m, content: m.content + chunk }))
+		append: (chunk: string) => update((m) => ({ ...m, content: m.content + chunk })),
 	};
-}
+};
 
 export const script = (messages: Message[]) => {
 	const { subscribe, update, set } = writable<Message[]>(messages);
@@ -28,8 +28,8 @@ export const script = (messages: Message[]) => {
 		subscribe,
 		set,
 		append: (line: Message) => {
-			update(lines => [...lines, line]);
+			update((lines) => [...lines, line]);
 			return line;
-		}
+		},
 	};
 };
