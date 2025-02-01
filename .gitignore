@@ -26,3 +26,4 @@ dist-ssr
 # rely on CI builds instead
 dist
 .svelte-kit
+test-results

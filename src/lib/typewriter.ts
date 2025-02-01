@@ -4,25 +4,25 @@ export const typewriter = (node: HTMLElement, { speed = 50, prefill = false }) =
 		throw new Error(`This transition only works on elements with text nodes`);
 	}
 	let totalLength = 0;
-	const ranges = targets.map(textNode => {
+	const ranges = targets.map((textNode) => {
 		if (!textNode.textContent) {
 			return undefined;
 		}
 		const range = [totalLength, totalLength + textNode.textContent.length];
 		totalLength += textNode.textContent.length;
 		const text = textNode.textContent;
-		textNode.textContent = prefill ? '\u00A0'.repeat(text.length) : '';
+		textNode.textContent = prefill ? "\u00A0".repeat(text.length) : "";
 		return { textNode, range, text };
 	});
 	let currentRangeIndex = 0;
 	const getCurrentRange = (i: number) => {
 		while (ranges[currentRangeIndex].range[1] < i && currentRangeIndex < ranges.length) {
 			const { textNode, text } = ranges[currentRangeIndex];
-			textNode.textContent = text;		// finish typing up the last node
+			textNode.textContent = text; // finish typing up the last node
 			currentRangeIndex++;
 		}
 		return ranges[currentRangeIndex];
-	}
+	};
 	const duration = totalLength * speed;
 	return {
 		duration,
@@ -34,14 +34,14 @@ export const typewriter = (node: HTMLElement, { speed = 50, prefill = false }) =
 
 			if (prefill) {
 				const filled = text.slice(0, textLength);
-				const spaces = '\u00A0'.repeat(text.length - textLength);
+				const spaces = "\u00A0".repeat(text.length - textLength);
 				textNode.textContent = filled + spaces;
 			} else {
 				textNode.textContent = text.slice(0, textLength);
 			}
 		},
 	};
-}
+};
 
 const flattext = (node: Node): Text[] => {
 	if (node.nodeType === Node.TEXT_NODE) {
@@ -51,7 +51,6 @@ const flattext = (node: Node): Text[] => {
 		return [];
 	}
 	const texts: Text[] = [];
-	node.childNodes.forEach(child =>
-		flattext(child).forEach(text => texts.push(text)));
+	node.childNodes.forEach((child) => flattext(child).forEach((text) => texts.push(text)));
 	return texts;
-}
+};

@@ -1,7 +1,18 @@
 {
 	"htmlWhitespaceSensitivity": "ignore",
-	"svelteStrictMode": false,
-	"svelteAllowShorthand": true,
-	"svelteBracketNewLine": false,
-	"useTabs": true
+	"plugins": ["prettier-plugin-svelte"],
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "svelte",
+				"svelteIndentScriptAndStyle": true,
+				"svelteSortOrder": "options-scripts-markup-styles",
+				"svelteStrictMode": false,
+				"bracketSameLine": true
+			}
+		}
+	],
+	"useTabs": true,
+	"printWidth": 100
 }

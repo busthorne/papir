@@ -9,18 +9,12 @@
 		"checkJs": true,
 		"moduleDetection": "force",
 		"isolatedModules": true,
-    "declaration": true,
-    "declarationDir": "./dist",
-    "outDir": "./dist",
-    "emitDeclarationOnly": true,
-		"types": [
-			"svelte"
-		]
+		"declaration": true,
+		"declarationDir": "./dist",
+		"outDir": "./dist",
+		"emitDeclarationOnly": true,
+		"types": ["svelte"]
 	},
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.js",
-		"src/**/*.svelte"
-	],
-	"references": [{"path": "./tsconfig.node.json"}]
+	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+	"references": [{ "path": "./tsconfig.node.json" }]
 }
