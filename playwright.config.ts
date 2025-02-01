@@ -13,7 +13,7 @@ export default defineConfig({
 		["json", { outputFile: "test-results/results.json" }],
 	],
 	use: {
-		baseURL: process.env.CI ? "http://127.0.0.1:5173" : "http://127.0.0.1:5174",
+		baseURL: "http://127.0.0.1:18080",
 		trace: "on-first-retry",
 		screenshot: "only-on-failure",
 		video: "retain-on-failure",
@@ -32,17 +32,14 @@ export default defineConfig({
 			use: { ...devices["Desktop Safari"] },
 		},
 	],
-	webServer: process.env.CI ? {
-		command: "npm run build && npm run preview -- --port 5173 --host",
-		url: "http://127.0.0.1:5173",
+	webServer: {
+		command: "npm run dev -- --port 18080 --host",
+		url: "http://127.0.0.1:18080",
 		reuseExistingServer: false,
-		stdout: "pipe",
+		stdout: "ignore",
 		stderr: "pipe",
-		timeout: 60000,
-		ignoreHTTPSErrors: true
-	} : undefined,
-	expect: {
-		timeout: 10000
 	},
-	globalTimeout: 600000
+	expect: {
+		timeout: 30000,
+	},
 });
