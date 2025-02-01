@@ -57,5 +57,8 @@
 	],
 	"author": "Busthorne",
 	"license": "MIT",
-	"homepage": "https://github.com/busthorne/papir"
+	"homepage": "https://github.com/busthorne/papir",
+	"publishConfig": {
+		"access": "public"
+	}
 }
