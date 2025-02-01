@@ -59,6 +59,7 @@
 		text-transform: uppercase;
 		font-size: 1.1rem;
 		padding-left: 10rem;
+		//text-align: center;
 		margin-bottom: 0.5rem;
 	}
 
