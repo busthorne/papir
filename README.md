@@ -1,8 +1,9 @@
 # Papir
+> A general-purpose design system, & UI component library, contrary to the chat paradigm.
 
-Playwriting as general-purpose UI/UX for multi-agent AI environments, contrary to chat interfaces.
+Papir is a Svelte implementation of a dramaturgy-inspired design system that reimagines chat interfaces as plays; above all, taking inspiration from the standard screenplay formatting and design language. We're not spirited by the commonplace practice of retrofitting rudimentary chat interfaces with ever-growing set of complex behaviours, widgets, & whatnot. Consider what Anthropic did with their [Artifact widgets][1]. Elegant at first glance, but ultimately _foreign_ to the text, on closer inspection.
 
-Papir is a Svelte implementation of a dramaturgy-inspired design system that reimagines chat interfaces as plays (standard screenplay formatting, in particular.) Rather than extending chat interfaces with new primitives, such as [artifacts][1], Papir taps into into the inherent expressiveness of dramatic writing, and hundreds of years of literary tradition. We believe this is a promising avenue for human-machine interaction, and will explore it more in the future.
+Papir chooses to borrow from the many years of literary tradition, & translate the expressiveness of dramatic writing to UI.
 
 ![](./public/train_car.png)
 
@@ -32,10 +33,10 @@ Please note the example is only illustrative, and the library have not been prop
 			{@const a = m.metadata.action}
 			<Action>
 				<Buffer markdown={a.content} />
-				<!-- page margin contain artifacts, & is how users interact with the environment -->
+				<!-- page margin contain artefacts, & is how users interact with the environment -->
 				<aside slot="right">
-					{#each a.artifacts as artifact}
-						<!-- render artifacts -->
+					{#each a.artefacts as artifact}
+						<!-- render artefacts -->
 					{/each}
 				</aside>
 			</Action>
@@ -101,7 +102,7 @@ MOVING ON:
 
 ### Margins
 
-Consider that where there's a page of text, there's margins. The biggest step forward in UX of AI systems, chat-bots, agents— the whole lot—in my opinion, was made by Anthropic in the form of [artifacts][1]. An artifact widget is alien to chat, but it doesn't have to be! In a play, there's ways to represent interdiscoursivity using interactive margins. Marks can be placed there strategically to affect how the text, and indeed, the conversations in it, are read: you can see different versions of events, or branches, meaning time travel.
+Consider that where there's a page of text, there's margins. The biggest step forward in UX of AI systems, chat-bots, agents— the whole lot—in my opinion, was made by Anthropic in the form of [artefacts][1]. An artifact widget is alien to chat, but it doesn't have to be! In a play, there's ways to represent interdiscoursivity using interactive margins. Marks can be placed there strategically to affect how the text, and indeed, the conversations in it, are read: you can see different versions of events, or branches, meaning time travel.
 
 This is contrary to how alternates have been so far implemented.
 

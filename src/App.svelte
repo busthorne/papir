@@ -75,7 +75,7 @@
 				markdown={message.content} />
 			{#if i == 0}
 				<Action>
-					<p>The margin may contains artifacts, and is how users interact with the environment.</p>
+					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
 						<p>
 							<RiShapesFill size={"24px"} />
