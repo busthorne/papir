@@ -1,4 +1,5 @@
 # Papir
+
 > A general-purpose design system, & UI component library, contrary to the chat paradigm.
 
 Papir is a Svelte implementation of a dramaturgy-inspired design system that reimagines chat interfaces as plays; above all, taking inspiration from the standard screenplay formatting and design language. We're not spirited by the commonplace practice of retrofitting rudimentary chat interfaces with ever-growing set of complex behaviours, widgets, & whatnot. Consider what Anthropic did with their [Artifact widgets][1]. Elegant at first glance, but ultimately _foreign_ to the text, on closer inspection.
