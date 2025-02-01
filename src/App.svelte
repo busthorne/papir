@@ -12,6 +12,7 @@
 
 	import { RiShapesFill } from "svelte-remixicon";
 	import { Markdown } from "carta-md";
+	import PrintHandler from "./lib/components/PrintHandler.svelte";
 
 	const empty = (role: string): Message => ({
 		role: role,
@@ -78,7 +79,9 @@
 					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
 						<p>
-							<RiShapesFill size={"24px"} />
+							<PrintHandler alterLink={"https://google.com"}>
+								<RiShapesFill size={"24px"} />
+							</PrintHandler>
 						</p>
 					</aside>
 				</Action>

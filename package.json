@@ -60,5 +60,8 @@
 	"homepage": "https://github.com/busthorne/papir",
 	"publishConfig": {
 		"access": "public"
+	},
+	"dependencies": {
+		"qr-code-styling": "^1.9.1"
 	}
 }
