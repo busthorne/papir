@@ -11,6 +11,8 @@
 		margin: auto;
 		box-sizing: border-box;
 		background: #fff;
+		padding-left: var(--sheet-horizontal-padding);
+		padding-right: var(--sheet-horizontal-padding);
 	}
 
 	:global(.papir section) {
@@ -23,6 +25,10 @@
 		gap: var(--band-gap);
 		width: 100%;
 		margin-top: 1rem;
+
+		@media (max-width: 768px) {
+			width: calc(100% + var(--leftband-width) + var(--rightband-width));
+		}
 	}
 	:global(.papir article) {
 		grid-column: script;

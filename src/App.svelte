@@ -163,9 +163,10 @@
 		--print: "IBM Plex Mono", monospace;
 		--print-size: 12px;
 		--sheet-width: 55vw;
-		--dialogue-width: 20vw;
-		--leftband-width: 0;
-		--rightband-width: 10vw;
+		--sheet-horizontal-padding: 0px;
+		--dialogue-width: 80%;
+		--leftband-width: 0px;
+		--rightband-width: 100px;
 		--band-gap: 5rem;
 
 		--border-color: #b9b9b9;
@@ -183,6 +184,25 @@
 
 		font-family: var(--print);
 		font-size: var(--print-size);
+
+		@media (max-width: 1440px) {
+			--sheet-width: 75vw;
+		}
+
+		@media (max-width: 1200px) {
+			--sheet-width: 85vw;
+		}
+
+		@media (max-width: 1024px) {
+			--sheet-width: 95vw;
+		}
+
+		@media (max-width: 768px) {
+			--sheet-width: 100vw;
+			//--sheet-horizontal-padding: 2rem;
+			--band-gap: 1rem;
+			--dialogue-width: 100%;
+		}
 	}
 
 	.remixicon {
@@ -196,6 +216,7 @@
 	body {
 		// background: #f5f5f5;
 		// background: #fff;
+		margin: 0;
 		margin-bottom: 50rem !important;
 	}
 	.papir {
