@@ -13,7 +13,7 @@ export default defineConfig({
 		["json", { outputFile: "test-results/results.json" }],
 	],
 	use: {
-		baseURL: "http://127.0.0.1:5174",
+		baseURL: process.env.CI ? "http://127.0.0.1:5173" : "http://127.0.0.1:5174",
 		trace: "on-first-retry",
 		screenshot: "only-on-failure",
 		video: "retain-on-failure",
@@ -32,12 +32,13 @@ export default defineConfig({
 			use: { ...devices["Desktop Safari"] },
 		},
 	],
-	webServer: {
+	webServer: process.env.CI ? {
 		command: "npm run dev",
-		url: "http://127.0.0.1:5174",
-		reuseExistingServer: !process.env.CI,
+		url: "http://127.0.0.1:5173",
+		reuseExistingServer: false,
 		stdout: "pipe",
 		stderr: "pipe",
-		timeout: 120000,
-	},
+		timeout: 60000,
+		ignoreHTTPSErrors: true
+	} : undefined,
 });
