@@ -9,38 +9,34 @@
     let qrCode: string = '';
     let iconElement: HTMLElement;
     
-    // QR параметри з повзунками
-    let size = 500;
-    let opacity = 0.5;
-    let dotScale = 0.5;
+    let size = 200;
+    let opacity = 0.1;
+    let dotScale = 0.45;
     let logoImage = '';
     
     async function generateAwesomeQR() {
         if (!url || !iconElement) {
-            console.log('Missing url or iconElement:', { url, iconElement });
             return;
         }
         
-        // Отримуємо src зображення з img тегу
+
         const imgElement = iconElement.querySelector('img');
         if (!imgElement) {
-            console.log('No img element found');
             return;
         }
         
+
         logoImage = imgElement.src;
         
-        console.log('Creating QR with logo:', logoImage);
         const qr = await new AwesomeQR({
             text: url,
-            size: size,
+            size: 1000,
             backgroundImage: logoImage,
             backgroundDimming: `rgba(0,0,0,${opacity})`,
             dotScale: dotScale,
         }).draw();
         
         qrCode = qr as string;
-        console.log('QR generated:', qrCode ? 'success' : 'failed', qrCode);
     }
     
     // Rerender QR when parameters change
@@ -59,7 +55,6 @@
             <span class="print-icon">
                 {#if qrCode}
                     <div class="qr-container">
-                        <img src={qrCode} alt="QR Code" width="100" height="100" />
                         <div class="qr-controls">
                             <label>
                                 Size: {size}
@@ -74,6 +69,7 @@
                                 <input type="range" bind:value={dotScale} min="0.1" max="1" step="0.1" />
                             </label>
                         </div>
+                        <img src={qrCode} alt="QR Code" width={size} height={size} />
                     </div>
                     <QRCode data={url} size={150} logoInBase64={logoImage} />
                 {:else}
@@ -110,6 +106,7 @@
         display: none;
     }
     
+
     @media print {
         .default-icon {
             display: none;
