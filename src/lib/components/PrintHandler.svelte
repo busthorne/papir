@@ -13,17 +13,19 @@
 		qr = new QRCodeStyling({
 			data: alterLink,
 			image: "/bober.png",
-			width: 150,
-			height: 150,
+			width: 75,
+			height: 75,
 			dotsOptions: { color: "#000", type: "rounded" },
 			backgroundOptions: { color: "#fff" },
-			imageOptions: { crossOrigin: "anonymous", margin: 5 },
+			imageOptions: { crossOrigin: "anonymous", margin: 1, imageSize: 0.5 },
+			shape: 'square'
 		});
 
 		if (CSSBased) qr.append(qrContainer);
 	});
 
-	window.addEventListener("beforeprint", () => {
+	window.addEventListener("beforeprint", (e) => {
+		console.log(e)
 		if (!CSSBased) {
 			showAlter = true;
 			setTimeout(() => qr.append(qrContainer), 0);
