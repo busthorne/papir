@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import QRCodeStyling from "qr-code-styling";
 
+	export let CSSBased: boolean = true;
 	export let alterLink: string;
 
 	let showAlter = false;
@@ -18,20 +19,48 @@
 			backgroundOptions: { color: "#fff" },
 			imageOptions: { crossOrigin: "anonymous", margin: 5 },
 		});
+
+		if (CSSBased) qr.append(qrContainer);
 	});
 
 	window.addEventListener("beforeprint", () => {
-		showAlter = true;
-		setTimeout(() => qr.append(qrContainer), 0);
+		if (!CSSBased) {
+			showAlter = true;
+			setTimeout(() => qr.append(qrContainer), 0);
+		}
 	});
 
 	window.addEventListener("afterprint", () => {
-		showAlter = false;
+		if (!CSSBased) {
+			showAlter = false;
+		}
 	});
 </script>
 
-{#if showAlter}
+{#if CSSBased}
+	<div bind:this={qrContainer} class="qrcode"></div>
+	<div class="children">
+		<slot></slot>
+	</div>
+{:else if showAlter}
 	<div bind:this={qrContainer}></div>
 {:else}
 	<slot></slot>
 {/if}
+
+<style>
+	.children {
+		display: unset;
+	}
+	.qrcode {
+		display: none;
+	}
+	@media print {
+		.children {
+			display: none;
+		}
+		.qrcode {
+			display: block;
+		}
+	}
+</style>
