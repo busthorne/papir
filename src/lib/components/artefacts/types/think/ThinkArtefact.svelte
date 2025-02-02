@@ -12,4 +12,5 @@
     {url}
     imgSrc={thinkIcon}
     imgAlt="Think artefact"
+    size={50}
 /> 

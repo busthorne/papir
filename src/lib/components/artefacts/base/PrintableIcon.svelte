@@ -9,7 +9,7 @@
     let qrCode: string = '';
     let iconElement: HTMLElement;
     
-    let size = 200;
+    let size = 150;
     let opacity = 0.1;
     let dotScale = 0.45;
     let logoImage = '';
@@ -39,11 +39,6 @@
         qrCode = qr as string;
     }
     
-    // Rerender QR when parameters change
-    $: if (iconElement && (size || opacity || dotScale)) {
-        generateAwesomeQR();
-    }
-    
     onMount(() => {
         generateAwesomeQR();
     });
@@ -51,27 +46,13 @@
 
 <div class="icon" {id}>
     {#if url}
-        <!-- <a href={url}> -->
+        <a href={url}>
             <span class="print-icon">
                 {#if qrCode}
                     <div class="qr-container">
-                        <div class="qr-controls">
-                            <label>
-                                Size: {size}
-                                <input type="range" bind:value={size} min="50" max="1000" step="50" />
-                            </label>
-                            <label>
-                                Opacity: {opacity}
-                                <input type="range" bind:value={opacity} min="0" max="1" step="0.1" />
-                            </label>
-                            <label>
-                                Dot Scale: {dotScale}
-                                <input type="range" bind:value={dotScale} min="0.1" max="1" step="0.1" />
-                            </label>
-                        </div>
                         <img src={qrCode} alt="QR Code" width={size} height={size} />
                     </div>
-                    <QRCode data={url} size={150} logoInBase64={logoImage} />
+                    <!-- <QRCode data={url} size={150} logoInBase64={logoImage} logoSize={15} /> -->
                 {:else}
                     <slot />
                 {/if}
@@ -79,7 +60,7 @@
             <span class="default-icon" bind:this={iconElement}>
                 <slot />
             </span>
-        <!-- </a> -->
+        </a>
     {:else}
         <span class="print-icon">
             <slot />
@@ -94,7 +75,7 @@
 
 <style lang="scss">
     .print-icon {
-        display: block;
+        display: none;
         
         img {
             object-fit: contain;
@@ -103,7 +84,7 @@
 
     
     .default-icon {
-        display: none;
+        display: block;
     }
     
 
