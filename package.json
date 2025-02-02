@@ -26,12 +26,14 @@
 		"test:ui": "playwright test --ui"
 	},
 	"devDependencies": {
+		"@castlenine/svelte-qrcode": "^2.3.0",
 		"@ibm/plex": "^6.4.1",
 		"@playwright/test": "^1.50.1",
 		"@sveltejs/package": "^2.3.7",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tsconfig/svelte": "^4.0.0",
 		"@types/node": "^22.13.0",
+		"awesome-qr": "2.1.5-rc.0",
 		"carta-md": "^4.6.3",
 		"isomorphic-dompurify": "^2.16.0",
 		"prettier": "^3.2.5",
