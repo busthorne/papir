@@ -12,6 +12,10 @@
 
 	import { RiShapesFill } from "svelte-remixicon";
 	import { Markdown } from "carta-md";
+	import { PrintableIcon, PrintableArtefact, ThinkArtefact } from './lib/components/artefacts/index';
+	// import PrintableArtefact from './lib/components/artefacts/PrintableArtefact.svelte';
+	// import thinkArtefact from './lib/components/artefacts/assets/think_artefact.png';
+
 
 	const empty = (role: string): Message => ({
 		role: role,
@@ -22,9 +26,24 @@
 	let post = script([]);
 	let tail = improv(empty("user"));
 
+	let isPrinting = false;
 	let mounted = false;
 	onMount(() => {
 		mounted = true;
+		const mediaQueryList = window.matchMedia('print');
+        
+        // Функція-обробник зміни стану
+        const handlePrintChange = (e: MediaQueryListEvent) => {
+            isPrinting = e.matches;
+        };
+        
+        // Додаємо слухача подій
+        mediaQueryList.addEventListener('change', handlePrintChange);
+        
+        // Прибираємо слухача при знищенні компонента
+        return () => {
+        	mediaQueryList.removeEventListener('change', handlePrintChange);
+    	};
 	});
 
 	let invited = undefined;
@@ -77,12 +96,14 @@
 				<Action>
 					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
-						<p>
-							<RiShapesFill size={"24px"} />
-						</p>
+						<ThinkArtefact 
+							id="think-artefact"
+							url="https://example.com"
+						/>
 					</aside>
 				</Action>
 			{/if}
+
 			{#if i == 2 && invited != false}
 				<Transition>
 					{#key invited}
@@ -180,4 +201,17 @@
 	.papir {
 		padding-top: 2rem;
 	}
+
+    .print-icon {
+        display: none;
+    }
+    
+    @media print {
+        .default-icon {
+            display: none;
+        }
+        .print-icon {
+            display: block;
+        }
+    }
 </style>
