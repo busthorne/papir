@@ -12,10 +12,13 @@
 
 	import { RiShapesFill } from "svelte-remixicon";
 	import { Markdown } from "carta-md";
-	import { PrintableIcon, PrintableArtefact, ThinkArtefact } from './lib/components/artefacts/index';
+	import {
+		PrintableIcon,
+		PrintableArtefact,
+		ThinkArtefact,
+	} from "./lib/components/artefacts/index";
 	// import PrintableArtefact from './lib/components/artefacts/PrintableArtefact.svelte';
 	// import thinkArtefact from './lib/components/artefacts/assets/think_artefact.png';
-
 
 	const empty = (role: string): Message => ({
 		role: role,
@@ -30,20 +33,20 @@
 	let mounted = false;
 	onMount(() => {
 		mounted = true;
-		const mediaQueryList = window.matchMedia('print');
-        
-        // Функція-обробник зміни стану
-        const handlePrintChange = (e: MediaQueryListEvent) => {
-            isPrinting = e.matches;
-        };
-        
-        // Додаємо слухача подій
-        mediaQueryList.addEventListener('change', handlePrintChange);
-        
-        // Прибираємо слухача при знищенні компонента
-        return () => {
-        	mediaQueryList.removeEventListener('change', handlePrintChange);
-    	};
+		const mediaQueryList = window.matchMedia("print");
+
+		// Функція-обробник зміни стану
+		const handlePrintChange = (e: MediaQueryListEvent) => {
+			isPrinting = e.matches;
+		};
+
+		// Додаємо слухача подій
+		mediaQueryList.addEventListener("change", handlePrintChange);
+
+		// Прибираємо слухача при знищенні компонента
+		return () => {
+			mediaQueryList.removeEventListener("change", handlePrintChange);
+		};
 	});
 
 	let invited = undefined;
@@ -96,10 +99,7 @@
 				<Action>
 					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
-						<ThinkArtefact 
-							id="think-artefact"
-							url="https://example.com"
-						/>
+						<ThinkArtefact id="think-artefact" url="https://example.com" />
 					</aside>
 				</Action>
 			{/if}
@@ -217,7 +217,6 @@
 		// background: #f5f5f5;
 		// background: #fff;
 		margin: 0;
-		margin-bottom: 50rem !important;
 	}
 	.papir {
 		padding-top: 2rem;
@@ -235,4 +234,10 @@
             display: block;
         }
     }
+	}
+
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 </style>
