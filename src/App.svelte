@@ -196,9 +196,13 @@
 		// background: #f5f5f5;
 		// background: #fff;
 		margin: 0;
-		margin-bottom: 50rem !important;
 	}
 	.papir {
 		padding-top: 2rem;
+	}
+
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
 	}
 </style>

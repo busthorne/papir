@@ -77,7 +77,7 @@
 				padding: 0 1rem 0 1rem;
 			}
 			.carta-container > * {
-				margin: 1.1rem 0 0.8rem 0;
+				margin: 1.7rem 0 1.4rem 0;
 			}
 			.carta-input {
 				caret-color: var(--caret-color);

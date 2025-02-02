@@ -22,11 +22,18 @@
 
 <style lang="scss">
 	.scene {
-		height: 2rem;
+		//height: 18px;
 		h1 {
-			font-size: 1rem;
-			font-weight: 900;
+			font-size: 18px;
+			font-weight: 600;
+			line-height: 23px;
 			text-transform: uppercase;
+			margin: 0 0 23px 0;
+
+			@media (max-width: 768px) {
+				font-size: 14px;
+				line-height: 18px;
+			}
 		}
 	}
 </style>

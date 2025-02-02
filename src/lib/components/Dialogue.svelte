@@ -15,7 +15,7 @@
 				{#if role}{role}{/if}
 			</slot>
 		</div>
-		<div class="parenthetical">
+		<div class="parenthetical" class:noMargin={!parenthetical}>
 			<slot name="parenthetical">
 				{#if parenthetical}({parenthetical}){/if}
 			</slot>
@@ -55,19 +55,34 @@
 
 	.role {
 		grid-column: dialogue;
-		font-weight: bold;
+		font-weight: 700;
 		text-transform: uppercase;
-		font-size: 1.1rem;
+		font-size: 18px;
 		padding-left: 10rem;
-		//text-align: center;
-		margin-bottom: 0.5rem;
+		margin-bottom: 14px;
+
+		@media (max-width: 768px) {
+			font-size: 14px;
+			line-height: 18px;
+		}
 	}
 
 	.parenthetical {
 		grid-column: dialogue;
 		color: #666;
 		padding-left: 7rem;
-		margin-bottom: 0.5rem;
+		margin-bottom: 14px;
+		font-size: 15px;
+		line-height: 19px;
+
+		&.noMargin {
+			margin: 0;
+		}
+
+		@media (max-width: 768px) {
+			font-size: 12px;
+			line-height: 16px;
+		}
 	}
 
 	.line {
@@ -85,6 +100,17 @@
 				15px 1px,
 				1px 15px,
 				1px 15px;
+		}
+
+		:global(p) {
+			margin-bottom: 37px !important;
+			font-size: 15px;
+			line-height: 19px;
+
+			@media (max-width: 768px) {
+				font-size: 12px;
+				line-height: 16px;
+			}
 		}
 	}
 </style>

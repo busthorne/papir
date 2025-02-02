@@ -102,16 +102,23 @@
 		&:not(.in-swipe).opened :global(.primary) {
 			opacity: 1;
 		}
+
+		&.opened :global(.secondary) {
+			width: 30vw;
+			padding: 2rem;
+		}
 	}
 	
 	.papir-content {
 		width: 130vw;
-		min-height: 100%;
+		height: auto;
 		display: flex;
+		justify-content: center;
+		margin-bottom: 50rem !important;
 	}
 	
 	.papir {
-		width: 100vw;
+		width: var(--sheet-width);
 		box-sizing: border-box;
 		background: #fff;
 		padding-left: var(--sheet-horizontal-padding);
@@ -136,7 +143,7 @@
 			[right] var(--rightband-width);
 		gap: var(--band-gap);
 		width: 100%;
-		margin-top: 1rem;
+		//margin-top: 1rem;
 
 		@media (max-width: 768px) {
 			width: calc(100% + var(--leftband-width) + var(--rightband-width));
