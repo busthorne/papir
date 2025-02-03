@@ -12,10 +12,13 @@
 
 	import { RiShapesFill } from "svelte-remixicon";
 	import { Markdown } from "carta-md";
-	import { PrintableIcon, PrintableArtefact, ThinkArtefact } from './lib/components/artefacts/index';
+	import {
+		PrintableIcon,
+		PrintableArtefact,
+		ThinkArtefact,
+	} from "./lib/components/artefacts/index";
 	// import PrintableArtefact from './lib/components/artefacts/PrintableArtefact.svelte';
 	// import thinkArtefact from './lib/components/artefacts/assets/think_artefact.png';
-
 
 	const empty = (role: string): Message => ({
 		role: role,
@@ -30,20 +33,20 @@
 	let mounted = false;
 	onMount(() => {
 		mounted = true;
-		const mediaQueryList = window.matchMedia('print');
-        
-        // Функція-обробник зміни стану
-        const handlePrintChange = (e: MediaQueryListEvent) => {
-            isPrinting = e.matches;
-        };
-        
-        // Додаємо слухача подій
-        mediaQueryList.addEventListener('change', handlePrintChange);
-        
-        // Прибираємо слухача при знищенні компонента
-        return () => {
-        	mediaQueryList.removeEventListener('change', handlePrintChange);
-    	};
+		const mediaQueryList = window.matchMedia("print");
+
+		// Функція-обробник зміни стану
+		const handlePrintChange = (e: MediaQueryListEvent) => {
+			isPrinting = e.matches;
+		};
+
+		// Додаємо слухача подій
+		mediaQueryList.addEventListener("change", handlePrintChange);
+
+		// Прибираємо слухача при знищенні компонента
+		return () => {
+			mediaQueryList.removeEventListener("change", handlePrintChange);
+		};
 	});
 
 	let invited = undefined;
@@ -96,10 +99,7 @@
 				<Action>
 					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
-						<ThinkArtefact 
-							id="think-artefact"
-							url="https://example.com"
-						/>
+						<ThinkArtefact id="think-artefact" url="https://example.com" />
 					</aside>
 				</Action>
 			{/if}
@@ -163,9 +163,10 @@
 		--print: "IBM Plex Mono", monospace;
 		--print-size: 12px;
 		--sheet-width: 55vw;
-		--dialogue-width: 20vw;
-		--leftband-width: 0;
-		--rightband-width: 10vw;
+		--sheet-horizontal-padding: 0px;
+		--dialogue-width: 80%;
+		--leftband-width: 0px;
+		--rightband-width: 100px;
 		--band-gap: 5rem;
 
 		--border-color: #b9b9b9;
@@ -183,6 +184,25 @@
 
 		font-family: var(--print);
 		font-size: var(--print-size);
+
+		@media (max-width: 1440px) {
+			--sheet-width: 75vw;
+		}
+
+		@media (max-width: 1200px) {
+			--sheet-width: 85vw;
+		}
+
+		@media (max-width: 1024px) {
+			--sheet-width: 95vw;
+		}
+
+		@media (max-width: 768px) {
+			--sheet-width: 100vw;
+			//--sheet-horizontal-padding: 2rem;
+			--band-gap: 1rem;
+			--dialogue-width: 100%;
+		}
 	}
 
 	.remixicon {
@@ -196,22 +216,27 @@
 	body {
 		// background: #f5f5f5;
 		// background: #fff;
-		margin-bottom: 50rem !important;
+		margin: 0;
 	}
 	.papir {
 		padding-top: 2rem;
 	}
 
-    .print-icon {
-        display: none;
-    }
-    
-    @media print {
-        .default-icon {
-            display: none;
-        }
-        .print-icon {
-            display: block;
-        }
-    }
+	.print-icon {
+		display: none;
+	}
+
+	@media print {
+		.default-icon {
+			display: none;
+		}
+		.print-icon {
+			display: block;
+		}
+	}
+
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 </style>
