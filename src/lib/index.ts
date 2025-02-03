@@ -4,3 +4,4 @@ export { default as Scene } from "./components/Scene.svelte";
 export { default as Action } from "./components/Action.svelte";
 export { default as Dialogue } from "./components/Dialogue.svelte";
 export { default as Transition } from "./components/Transition.svelte";
+export { default as Artefact } from "./components/Artefact.svelte";

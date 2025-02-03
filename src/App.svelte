@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Papir, Dialogue, Scene, Action, Transition, Buffer } from "./lib";
+	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
+	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	import { onMount } from "svelte";
 	import { fade, fly } from "svelte/transition";
@@ -99,7 +100,15 @@
 				<Action>
 					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
 					<aside slot="right">
-						<ThinkArtefact id="think-artefact" url="https://example.com" />
+						<Artefact
+							icon={thinkIcon}
+							url="https://example.com"
+							id="think-artefact"
+							size={50}
+							alt="Think artefact"
+							on:hover={() => console.log("hover")}
+							on:peak={() => console.log("peak")}
+							on:reveal={() => console.log("reveal")} />
 					</aside>
 				</Action>
 			{/if}
@@ -222,21 +231,16 @@
 		padding-top: 2rem;
 	}
 
-	.print-icon {
-		display: none;
-	}
-
-	@media print {
-		.default-icon {
-			display: none;
-		}
-		.print-icon {
-			display: block;
-		}
-	}
-
-	p {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
+    .print-icon {
+        display: none;
+    }
+    
+    @media print {
+        .default-icon {
+            display: none;
+        }
+        .print-icon {
+            display: block;
+        }
+    }
 </style>
