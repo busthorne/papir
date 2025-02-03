@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import type { Message } from "./types";
+import { spring } from 'svelte/motion';
 
 const flipFlop = () => {
 	const { subscribe, set } = writable(false);
@@ -33,3 +34,12 @@ export const script = (messages: Message[]) => {
 		},
 	};
 };
+
+export const isOpen = writable(false);
+export const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
+// Функція для керування станом
+export function toggleOpen(value: boolean) {
+	isOpen.set(value);
+	const max = window.innerWidth * 0.1;
+	scrollLeft.set(value ? max : 0);
+}

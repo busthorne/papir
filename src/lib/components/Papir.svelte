@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { spring } from 'svelte/motion';
 	import { setContext } from 'svelte';
-	
-	export let isOpen = false;
-	
-	const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
+	import { isOpen, scrollLeft } from '../../stores';
 	
 	// Функція для програмного свайпу
 	function toggleOpen(value: boolean) {
-		isOpen = value;
+		isOpen.set(value);
 		const max = window.innerWidth * 0.1;
 		scrollLeft.set(value ? max : 0);
 	}
@@ -49,10 +46,10 @@
 			if (isSwipe) {
 				const maxScroll = window.innerWidth * 0.3;
 				const swiped = Math.abs(xDiff) >= window.innerWidth * 0.125;
-				isOpen = swiped ? xDiff > 0 : isOpen;
+				isOpen.set(swiped ? xDiff > 0 : $isOpen);
 				
 				node.classList.remove('in-swipe');
-				scrollLeft.set(isOpen ? maxScroll : 0);
+				scrollLeft.set($isOpen ? maxScroll : 0);
 			}
 		};
 		
@@ -71,7 +68,7 @@
 	};
 </script>
 
-<div class="papir-container" class:opened={isOpen} use:hinge>
+<div class="papir-container" class:opened={$isOpen} use:hinge>
 	<div class="papir-content">
 		<div class="papir primary">
 			<slot />

@@ -2,6 +2,7 @@
 	import PrintableIcon from "./artefacts/PrintableIcon.svelte";
 	import { createEventDispatcher } from "svelte";
 	import type { SvelteComponent } from "svelte";
+	import { toggleOpen, isOpen } from "../../stores";
 
 	const dispatch = createEventDispatcher();
 
@@ -23,6 +24,7 @@
 	}
 
 	function handleReveal(event: MouseEvent) {
+		toggleOpen(!$isOpen);
 		dispatch("reveal", { event });
 	}
 </script>

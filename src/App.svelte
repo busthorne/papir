@@ -231,16 +231,16 @@
 		padding-top: 2rem;
 	}
 
-    .print-icon {
-        display: none;
-    }
-    
-    @media print {
-        .default-icon {
-            display: none;
-        }
-        .print-icon {
-            display: block;
-        }
-    }
+	.print-icon {
+		display: none;
+	}
+
+	@media print {
+		.default-icon {
+			display: none;
+		}
+		.print-icon {
+			display: block;
+		}
+	}
 </style>

@@ -44,7 +44,7 @@
 
 <div class="icon" {id}>
 	{#if url}
-		<a href={url}>
+		<!-- <a href={url}> -->
 			<span class="print-icon">
 				{#if qrCode}
 					<div class="qr-container">
@@ -58,7 +58,7 @@
 			<span class="default-icon" {id} bind:this={iconElement}>
 				<slot />
 			</span>
-		</a>
+		<!-- </a> -->
 	{:else}
 		<span class="print-icon">
 			<slot />
