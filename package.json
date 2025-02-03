@@ -1,6 +1,6 @@
 {
 	"name": "@busthorne/papir",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Dramaturgy design system for Svelte",
 	"type": "module",
 	"files": [
