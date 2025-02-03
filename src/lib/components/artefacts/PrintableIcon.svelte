@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { AwesomeQR } from "awesome-qr";
 	import QRCode from "@castlenine/svelte-qrcode";
+	import { isOpen } from "../../../stores";
 
 	export let id: string = "";
 	export let url: string = "";
@@ -42,22 +43,22 @@
 	});
 </script>
 
-<div class="icon" {id}>
+<div class="icon" {id} class:isOpen={$isOpen}>
 	{#if url}
 		<!-- <a href={url}> -->
-			<span class="print-icon">
-				{#if qrCode}
-					<div class="qr-container">
-						<img src={qrCode} alt="QR Code" width={size} height={size} />
-					</div>
-					<!-- <QRCode data={url} size={150} logoInBase64={logoImage} logoSize={15} /> -->
-				{:else}
-					<slot />
-				{/if}
-			</span>
-			<span class="default-icon" {id} bind:this={iconElement}>
+		<span class="print-icon">
+			{#if qrCode}
+				<div class="qr-container">
+					<img src={qrCode} alt="QR Code" width={size} height={size} />
+				</div>
+				<!-- <QRCode data={url} size={150} logoInBase64={logoImage} logoSize={15} /> -->
+			{:else}
 				<slot />
-			</span>
+			{/if}
+		</span>
+		<span class="default-icon" {id} bind:this={iconElement}>
+			<slot />
+		</span>
 		<!-- </a> -->
 	{:else}
 		<span class="print-icon">
@@ -123,6 +124,15 @@
 		a {
 			color: inherit;
 			text-decoration: none;
+		}
+
+		@media (max-width: 768px) {
+			transform: translateX(calc(-50% + 3px));
+			transition: transform 0.3s ease-in-out;
+
+			&.isOpen {
+				transform: translateX(calc(-50% - 3px)) scaleX(-1);
+			}
 		}
 	}
 </style>

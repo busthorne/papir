@@ -87,6 +87,10 @@
 
 {#if mounted}
 	<Papir>
+		<div slot="artifacts">
+			<div class="artifact">📜 Артефакт 3</div>
+			<div class="artifact">🗿 Артефакт 4</div>
+		</div>
 		<div in:typewriter={{ speed: 50 }}>
 			<Scene prefix={"int."} where={"train car"} when={"future"} />
 		</div>
@@ -98,7 +102,9 @@
 				markdown={message.content} />
 			{#if i == 0}
 				<Action>
-					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
+					<p class:isArtefact={true}>
+						The margin may contains artefacts, and is how users interact with the environment.
+					</p>
 					<aside slot="right">
 						<Artefact
 							icon={thinkIcon}
@@ -233,6 +239,14 @@
 
 	.print-icon {
 		display: none;
+	}
+
+	p {
+		&.isArtefact {
+			@media (max-width: 768px) {
+				padding-right: 50px;
+			}
+		}
 	}
 
 	@media print {
