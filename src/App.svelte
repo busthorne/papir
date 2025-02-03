@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
+	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact, Hinge } from "./lib";
 	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	import { onMount } from "svelte";
@@ -32,6 +32,7 @@
 
 	let isPrinting = false;
 	let mounted = false;
+	let isOpen = false;
 	onMount(() => {
 		mounted = true;
 		const mediaQueryList = window.matchMedia("print");
@@ -86,85 +87,87 @@
 </script>
 
 {#if mounted}
-	<Papir>
-		<div in:typewriter={{ speed: 50 }}>
-			<Scene prefix={"int."} where={"train car"} when={"future"} />
-		</div>
-		<Action value={loremIpsum("user").slice(0, -1) + "."} />
-		{#each $pre as message, i}
-			<Dialogue
-				role={dial1(message.role)}
-				parenthetical={message.parenthetical}
-				markdown={message.content} />
-			{#if i == 0}
-				<Action>
-					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
-					<aside slot="right">
-						<Artefact
-							icon={thinkIcon}
-							url="https://example.com"
-							id="think-artefact"
-							size={50}
-							alt="Think artefact"
-							on:hover={() => console.log("hover")}
-							on:peak={() => console.log("peak")}
-							on:reveal={() => console.log("reveal")} />
-					</aside>
-				</Action>
-			{/if}
-
-			{#if i == 2 && invited != false}
-				<Transition>
-					{#key invited}
-						<p in:typewriter={{ speed: 50, prefill: true }}>
-							{#if invited == undefined}
-								invite <b>{dial2()}</b>
-								?
-							{:else if invited}
-								enter {dial2()}:
-							{/if}
-						</p>
-					{/key}
-					<aside slot="right">
-						<p>
-							{#if invited == undefined}
-								<a href="#yes" on:click={() => (invited = true)}>YES</a>
-								<a href="#no" on:click={() => (invited = false)}>NO</a>
-							{/if}
-						</p>
-					</aside>
-				</Transition>
-			{/if}
-		{/each}
-		{#if invited}
-			<div in:fade={{ duration: 200 }}>
+	<Hinge bind:isOpen>
+		<Papir>
+			<div in:typewriter={{ speed: 50 }}>
+				<Scene prefix={"int."} where={"train car"} when={"future"} />
+			</div>
+			<Action value={loremIpsum("user").slice(0, -1) + "."} />
+			{#each $pre as message, i}
 				<Dialogue
-					markdown={"I will be trying to perform a very complex calculation on the data—"}
-					cont>
-					<span slot="role">{dial2()}</span>
-				</Dialogue>
-				<Dialogue markdown={"Processing input..."}>
-					<span slot="parenthetical">(thinking)</span>
-				</Dialogue>
-			</div>
-		{/if}
-		{#each $post as message, i}
-			<div in:fly={{ y: 20, duration: 200 }}>
-				<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
-			</div>
-		{/each}
-		{#if invited !== undefined}
-			{#key tail}
-				<div in:fade={{ duration: 200, delay: 200 }}>
+					role={dial1(message.role)}
+					parenthetical={message.parenthetical}
+					markdown={message.content} />
+				{#if i == 0}
+					<Action>
+						<p>The margin may contains artefacts, and is how users interact with the environment.</p>
+						<aside slot="right">
+							<Artefact
+								icon={thinkIcon}
+								url="https://appar.at/dW7ve232/1dkw2h"
+								id="think-artefact"
+								size={50}
+								alt="Think artefact"
+								on:hover={() => console.log("hover")}
+								on:peak={() => console.log("peak")}
+								on:reveal={() => console.log("reveal")} />
+						</aside>
+					</Action>
+				{/if}
+
+				{#if i == 2 && invited != false}
+					<Transition>
+						{#key invited}
+							<p in:typewriter={{ speed: 50, prefill: true }}>
+								{#if invited == undefined}
+									invite <b>{dial2()}</b>
+									?
+								{:else if invited}
+									enter {dial2()}:
+								{/if}
+							</p>
+						{/key}
+						<aside slot="right">
+							<p>
+								{#if invited == undefined}
+									<a href="#yes" on:click={() => (invited = true)}>YES</a>
+									<a href="#no" on:click={() => (invited = false)}>NO</a>
+								{/if}
+							</p>
+						</aside>
+					</Transition>
+				{/if}
+			{/each}
+			{#if invited}
+				<div in:fade={{ duration: 200 }}>
 					<Dialogue
-						role={$tail.role}
-						bind:markdown={$tail.content}
-						on:shutter={() => (listening = true)}
-						prompt={!listening} />
+						markdown={"I will be trying to perform a very complex calculation on the data—"}
+						cont>
+						<span slot="role">{dial2()}</span>
+					</Dialogue>
+					<Dialogue markdown={"Processing input..."}>
+						<span slot="parenthetical">(thinking)</span>
+					</Dialogue>
 				</div>
-			{/key}
-		{/if}
-	</Papir>
+			{/if}
+			{#each $post as message, i}
+				<div in:fly={{ y: 20, duration: 200 }}>
+					<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
+				</div>
+			{/each}
+			{#if invited !== undefined}
+				{#key tail}
+					<div in:fade={{ duration: 200, delay: 200 }}>
+						<Dialogue
+							role={$tail.role}
+							bind:markdown={$tail.content}
+							on:shutter={() => (listening = true)}
+							prompt={!listening} />
+					</div>
+				{/key}
+			{/if}
+		</Papir>
+	</Hinge>
 {/if}
 
 <style global lang="scss">
@@ -206,10 +209,15 @@
 			--sheet-width: 95vw;
 		}
 
+		@media print {
+			--sheet-width: 50vw;
+			--sheet-horizontal-padding: 5rem;
+		}
+
 		@media (max-width: 768px) {
 			--sheet-width: 100vw;
-			//--sheet-horizontal-padding: 2rem;
-			--band-gap: 1rem;
+			--sheet-horizontal-padding: 5rem;
+			--band-gap: 0.5rem;
 			--dialogue-width: 100%;
 		}
 	}
