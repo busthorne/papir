@@ -74,7 +74,7 @@
 	}
 
 	function handleArtefactReveal(event: CustomEvent) {
-		const { isOpen } = event.detail;
+		const { isOpen } = event.detail;		
 		dispatchPapirEvent(isOpen ? "close" : "open", "main-papir");
 	}
 

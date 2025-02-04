@@ -10,13 +10,13 @@
 	// Додаємо реактивні змінні для різних розмірів екрану
 	$: isMobile = window.innerWidth <= 768;
 	$: maxStages = isMobile ? 3 : 2;
-	$: firstStageScroll = window.innerWidth * (isMobile ? 0.2 : 0.1);
-	$: secondStageScroll = window.innerWidth * (isMobile ? 0.5 : 0.7);
+	$: firstStageScroll = window.innerWidth * (isMobile ? 0.2 : 0.2);
+	$: secondStageScroll = window.innerWidth * (isMobile ? 0.5 : 0.9);
 	$: thirdStageScroll = window.innerWidth * 0.8;
 	export let swipeThreshold = window.innerWidth * 0.125;
 
 	const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
-	let currentStage = 0;
+	$: currentStage = 0;
 
 	// Local reactive state that syncs with the store
 	$: state = $papirStore[id] || { isOpen: false, activeArtefact: null };
@@ -37,15 +37,23 @@
 			case 2: return secondStageScroll;
 			case 1: return firstStageScroll;
 			default: return 0;
+
 		}
 	}
 
 	function toggleOpen(value: boolean, stage: number = 1) {
 		papirStore.toggleOpen(id, value);
-		currentStage = value ? Math.min(stage, maxStages) : 0;
+		if (isMobile && stage === 1) {
+			currentStage = value ? 1 : 2;
+		} else {
+			currentStage = value ? 1 : 0;			
+		}
+		console.log(currentStage);
+		
 		const targetScroll = getTargetScroll(currentStage);
 		scrollLeft.set(targetScroll);
 		dispatch("papirStateChange", { isOpen: value, stage: currentStage });
+
 	}
 
 	// Handle global events
@@ -55,6 +63,7 @@
 			toggleOpen(action === "open");
 		}
 	}
+
 
 	onMount(() => {
 		window.addEventListener('resize', handleResize);
@@ -170,8 +179,13 @@
 			<slot />
 		</div>
 		<div class="papir secondary">
-			<slot name="artifacts" />
-		</div>
+				{#if (currentStage=== 2) || !isMobile && currentStage === 1}
+					<slot name="artifacts" />
+				{/if}
+			</div>
+
+
+
 	</div>
 </div>
 
@@ -289,6 +303,6 @@
 	}
 	:global(.papir article + aside) {
 		grid-column: right;
-		text-align: left;
+		// text-align: left;
 	}
 </style>
