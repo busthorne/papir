@@ -73,8 +73,9 @@
 		dispatchPapirEvent("open", "main-papir");
 	}
 
-	function handleArtefactReveal() {
-		dispatchPapirEvent("open", "main-papir");
+	function handleArtefactReveal(event: CustomEvent) {
+		const { isOpen } = event.detail;
+		dispatchPapirEvent(isOpen ? 'close' : 'open', 'main-papir');
 	}
 
 	let invited = undefined;
@@ -113,111 +114,136 @@
 
 {#if mounted}
 	<!-- <div class="papir-container"> -->
-	<Papir id="main-papir" on:papirStateChange={handlePapirStateChange}>
-		<div in:typewriter={{ speed: 50 }}>
-			<Scene prefix={"int."} where={"train car"} when={"future"} />
-		</div>
-		<Action value={loremIpsum("user").slice(0, -1) + "."} />
-		{#each $pre as message, i}
-			<Dialogue
-				role={dial1(message.role)}
-				parenthetical={message.parenthetical}
-				markdown={message.content} />
-			{#if i == 0}
-				<Action>
-					<p class:isArtefact={true}>
-						The margin may contains artefacts, and is how users interact with the environment.
-					</p>
-					<aside slot="right">
-						<Artefact
-							icon={thinkIcon}
-							url="https://appar.at/dW7ve232/1dkw2h"
-							id="think-artefact"
-							papirId="main-papir"
-							size={50}
-							alt="Think artefact"
-							on:hover={() => console.log("hover")}
-							on:peak={() => console.log("peak")}
-							on:reveal={handleArtefactReveal} />
-					</aside>
-				</Action>
-			{/if}
-
-			{#if i == 2 && invited != false}
-				<Transition>
-					{#key invited}
-						<p in:typewriter={{ speed: 50, prefill: true }}>
-							{#if invited == undefined}
-								invite <b>{dial2()}</b>
-								?
-							{:else if invited}
-								enter {dial2()}:
-							{/if}
-						</p>
-					{/key}
-					<aside slot="right">
-						<p>
-							{#if invited == undefined}
-								<a href="#yes" on:click={() => (invited = true)}>YES</a>
-								<a href="#no" on:click={() => (invited = false)}>NO</a>
-							{/if}
-						</p>
-					</aside>
-				</Transition>
-			{/if}
-		{/each}
-		{#if invited}
-			<div in:fade={{ duration: 200 }}>
+		<Papir 
+			id="main-papir"
+			on:papirStateChange={handlePapirStateChange}
+		>
+			<div in:typewriter={{ speed: 50 }}>
+				<Scene prefix={"int."} where={"train car"} when={"future"} />
+			</div>
+			<Action value={loremIpsum("user").slice(0, -1) + "."} />
+			{#each $pre as message, i}
 				<Dialogue
-					markdown={"I will be trying to perform a very complex calculation on the data—"}
-					cont>
-					<span slot="role">{dial2()}</span>
-				</Dialogue>
-				<Dialogue markdown={"Processing input..."}>
-					<span slot="parenthetical">(thinking)</span>
-				</Dialogue>
-			</div>
-		{/if}
-		{#each $post as message, i}
-			<div in:fly={{ y: 20, duration: 200 }}>
-				<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
-			</div>
-		{/each}
-		{#if invited !== undefined}
-			{#key tail}
-				<div in:fade={{ duration: 200, delay: 200 }}>
+					role={dial1(message.role)}
+					parenthetical={message.parenthetical}
+					markdown={message.content} />
+				{#if i == 0}
+					<Action>
+						<p>The margin may contains artefacts, and is how users interact with the environment.</p>
+						<aside slot="right">
+							<Artefact
+								icon={thinkIcon}
+								url="https://appar.at/dW7ve232/1dkw2h"
+								id="think-artefact"
+								papirId="main-papir"
+								size={50}
+								alt="Think artefact"
+								on:hover={() => console.log("hover")}
+								on:peak={() => console.log("peak")}
+								on:reveal={handleArtefactReveal} />
+						</aside>
+					</Action>
+				{/if}
+
+				{#if i == 2 && invited != false}
+					<Transition>
+						{#key invited}
+							<p in:typewriter={{ speed: 50, prefill: true }}>
+								{#if invited == undefined}
+									invite <b>{dial2()}</b>
+									?
+								{:else if invited}
+									enter {dial2()}:
+								{/if}
+							</p>
+						{/key}
+						<aside slot="right">
+							<p>
+								{#if invited == undefined}
+									<a href="#yes" on:click={() => (invited = true)}>YES</a>
+									<a href="#no" on:click={() => (invited = false)}>NO</a>
+								{/if}
+							</p>
+						</aside>
+					</Transition>
+				{/if}
+			{/each}
+			{#if invited}
+				<div in:fade={{ duration: 200 }}>
 					<Dialogue
-						role={$tail.role}
-						bind:markdown={$tail.content}
-						on:shutter={() => (listening = true)}
-						prompt={!listening} />
+						markdown={"I will be trying to perform a very complex calculation on the data—"}
+						cont>
+						<span slot="role">{dial2()}</span>
+					</Dialogue>
+					<Dialogue markdown={"Processing input..."}>
+						<span slot="parenthetical">(thinking)</span>
+					</Dialogue>
 				</div>
-			{/key}
-		{/if}
-		<div slot="artifacts">
-			{#if mainPapirState.isOpen && !isHovered}
-				<Papir id="secondary-papir" on:papirStateChange={handlePapirStateChange}>
+			{/if}
+			{#each $post as message, i}
+				<div in:fly={{ y: 20, duration: 200 }}>
+					<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
+				</div>
+			{/each}
+			{#if invited !== undefined}
+				{#key tail}
+					<div in:fade={{ duration: 200, delay: 200 }}>
+						<Dialogue
+							role={$tail.role}
+							bind:markdown={$tail.content}
+							on:shutter={() => (listening = true)}
+							prompt={!listening} />
+					</div>
+				{/key}
+			{/if}
+			<div slot="artifacts">
+				{#if mainPapirState.isOpen && !isHovered}
+
+				<Papir 
+				
+					id="secondary-papir"
+					on:papirStateChange={handlePapirStateChange}
+				>
 					<div class="secondary-content">
 						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
 						<Action>
 							<p>This is additional content that appears after the hinge effect.</p>
+							<aside slot="right">
+								<Artefact
+									icon={thinkIcon}
+									url="https://appar.at/dW7ve232/1dkw2h"
+									id="think-artefact"
+									papirId="secondary-papir"
+									size={50}
+									alt="Think artefact"
+									on:hover={() => console.log("hover")}
+									on:peak={() => console.log("peak")}
+									on:reveal={handleArtefactReveal} />
+							</aside>
 						</Action>
 					</div>
+					
 				</Papir>
 			{/if}
-		</div>
+			</div>
 	</Papir>
 
-	<!-- {#if mainPapirState.isOpen && !isHovered}
-			<Papir id="secondary-papir" on:papirStateChange={handlePapirStateChange}>
-				<div class="secondary-content">
-					<Scene prefix={"int."} where={"secondary view"} when={"now"} />
-					<Action>
-						<p>This is additional content that appears after the hinge effect.</p>
-					</Action>
-				</div>
-			</Papir>
-		{/if} -->
+
+{#if mainPapirState.isOpen && !isHovered}
+
+<!-- <Papir 
+
+	id="secondary-papir"
+	on:papirStateChange={handlePapirStateChange}
+>
+	<div class="secondary-content">
+		<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+		<Action>
+			<p>This is additional content that appears after the hinge effect.</p>
+		</Action>
+	</div>
+</Papir> -->
+{/if}
 	<!-- </div> -->
 {/if}
 
