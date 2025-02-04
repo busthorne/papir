@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact, Hinge } from "./lib";
+	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
+	import { papirStore, dispatchPapirEvent } from './lib/stores/papir';
 	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	import { onMount } from "svelte";
@@ -32,31 +33,51 @@
 
 	let isPrinting = false;
 	let mounted = false;
-	let isOpen = false;
+	
+	$: mainPapirState = $papirStore['main-papir'] || { isOpen: false, activeArtefact: null };
+	$: secondaryPapirState = $papirStore['secondary-papir'] || { isOpen: false, activeArtefact: null };
+	$: isOpen = mainPapirState.isOpen;
+
+	let isHovered = false;
+
 	onMount(() => {
 		mounted = true;
 		const mediaQueryList = window.matchMedia("print");
 
-		// Функція-обробник зміни стану
 		const handlePrintChange = (e: MediaQueryListEvent) => {
 			isPrinting = e.matches;
 		};
 
-		// Додаємо слухача подій
 		mediaQueryList.addEventListener("change", handlePrintChange);
 
-		// Прибираємо слухача при знищенні компонента
 		return () => {
 			mediaQueryList.removeEventListener("change", handlePrintChange);
 		};
 	});
 
-	let invited = undefined;
+	function handlePapirStateChange(event: CustomEvent) {
+		const { action, papirId } = event.detail;
+		if (papirId === 'main-papir') {
+			if (action === 'hover') {
+				isHovered = true;
+			} else if (action === 'close') {
+				isHovered = false;
+			}
+		}
+	}
 
-	const dial =
-		(user: string, assistant: string) =>
-		(role = "assistant") =>
-			role == "assistant" ? assistant : user;
+	function handleArtefactClick() {
+		dispatchPapirEvent('open', 'main-papir');
+	}
+
+
+	function handleArtefactReveal() {
+		dispatchPapirEvent('open', 'main-papir');
+	}
+
+	let invited = undefined;
+	const dial = (user: string, assistant: string) => (role = "assistant") =>
+		role == "assistant" ? assistant : user;
 	const dial1 = dial("user", "agent #1");
 	const dial2 = dial("user", "agent #2");
 
@@ -87,8 +108,11 @@
 </script>
 
 {#if mounted}
-	<Hinge bind:isOpen>
-		<Papir>
+	<div class="papir-container">
+		<Papir 
+			id="main-papir"
+			on:papirStateChange={handlePapirStateChange}
+		>
 			<div in:typewriter={{ speed: 50 }}>
 				<Scene prefix={"int."} where={"train car"} when={"future"} />
 			</div>
@@ -106,11 +130,12 @@
 								icon={thinkIcon}
 								url="https://appar.at/dW7ve232/1dkw2h"
 								id="think-artefact"
+								papirId="main-papir"
 								size={50}
 								alt="Think artefact"
 								on:hover={() => console.log("hover")}
 								on:peak={() => console.log("peak")}
-								on:reveal={() => console.log("reveal")} />
+								on:reveal={handleArtefactReveal} />
 						</aside>
 					</Action>
 				{/if}
@@ -166,8 +191,42 @@
 					</div>
 				{/key}
 			{/if}
-		</Papir>
-	</Hinge>
+			<!-- <div slot="artifacts">
+				{#if mainPapirState.isOpen && !isHovered}
+
+				<Papir 
+				
+					id="secondary-papir"
+					on:papirStateChange={handlePapirStateChange}
+				>
+					<div class="secondary-content">
+						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+						<Action>
+							<p>This is additional content that appears after the hinge effect.</p>
+						</Action>
+					</div>
+				</Papir>
+			{/if}
+			</div> -->
+	</Papir>
+
+
+{#if mainPapirState.isOpen && !isHovered}
+
+<Papir 
+
+	id="secondary-papir"
+	on:papirStateChange={handlePapirStateChange}
+>
+	<div class="secondary-content">
+		<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+		<Action>
+			<p>This is additional content that appears after the hinge effect.</p>
+		</Action>
+	</div>
+</Papir>
+{/if}
+	</div>
 {/if}
 
 <style global lang="scss">
@@ -251,4 +310,22 @@
             display: block;
         }
     }
+
+	.papir-container {
+		display: flex;
+		width: 100%;
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	.secondary-content {
+		opacity: 0;
+		animation: fadeIn 0.3s forwards;
+		animation-delay: 0.3s; // Delay until after hinge animation
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
 </style>
