@@ -6,8 +6,13 @@
 	const dispatch = createEventDispatcher();
 
 	export let id: string;
-	export let firstStageScroll = window.innerWidth * 0.3;
-	export let secondStageScroll = window.innerWidth * 0.7;
+	
+	// Додаємо реактивні змінні для різних розмірів екрану
+	$: isMobile = window.innerWidth <= 768;
+	$: maxStages = isMobile ? 3 : 2;
+	$: firstStageScroll = window.innerWidth * (isMobile ? 0.2 : 0.1);
+	$: secondStageScroll = window.innerWidth * (isMobile ? 0.5 : 0.7);
+	$: thirdStageScroll = window.innerWidth * 0.8;
 	export let swipeThreshold = window.innerWidth * 0.125;
 
 	const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
@@ -17,11 +22,28 @@
 	$: state = $papirStore[id] || { isOpen: false, activeArtefact: null };
 	$: isOpen = state.isOpen;
 
+	// Додаємо обробник зміни розміру вікна
+	function handleResize() {
+		if (currentStage > maxStages - 1) {
+			currentStage = maxStages - 1;
+			const targetScroll = getTargetScroll(currentStage);
+			scrollLeft.set(targetScroll);
+		}
+	}
+
+	function getTargetScroll(stage: number): number {
+		switch(stage) {
+			case 3: return thirdStageScroll;
+			case 2: return secondStageScroll;
+			case 1: return firstStageScroll;
+			default: return 0;
+		}
+	}
+
 	function toggleOpen(value: boolean, stage: number = 1) {
 		papirStore.toggleOpen(id, value);
-		currentStage = value ? stage : 0;
-		const targetScroll = currentStage === 2 ? secondStageScroll : 
-						   currentStage === 1 ? firstStageScroll : 0;
+		currentStage = value ? Math.min(stage, maxStages) : 0;
+		const targetScroll = getTargetScroll(currentStage);
 		scrollLeft.set(targetScroll);
 		dispatch("papirStateChange", { isOpen: value, stage: currentStage });
 	}
@@ -35,11 +57,13 @@
 	}
 
 	onMount(() => {
+		window.addEventListener('resize', handleResize);
 		papirStore.register(id);
 		window.addEventListener("papir-action", handlePapirAction as EventListener);
 	});
 
 	onDestroy(() => {
+		window.removeEventListener('resize', handleResize);
 		papirStore.unregister(id);
 		window.removeEventListener("papir-action", handlePapirAction as EventListener);
 	});
@@ -80,17 +104,29 @@
 
 			if (Math.abs(xDiff) > swipeThreshold) {
 				if (xDiff > 0) {
-					newStage = currentStage < 2 ? currentStage + 1 : 2;
+					newStage = currentStage < maxStages ? currentStage + 1 : maxStages;
 				} else {
 					newStage = currentStage > 0 ? currentStage - 1 : 0;
 				}
 			} else {
-				if (currentScroll > secondStageScroll * 0.7) {
-					newStage = 2;
-				} else if (currentScroll > firstStageScroll * 0.7) {
-					newStage = 1;
+				if (isMobile) {
+					if (currentScroll > thirdStageScroll * 0.7) {
+						newStage = 3;
+					} else if (currentScroll > secondStageScroll * 0.7) {
+						newStage = 2;
+					} else if (currentScroll > firstStageScroll * 0.7) {
+						newStage = 1;
+					} else {
+						newStage = 0;
+					}
 				} else {
-					newStage = 0;
+					if (currentScroll > secondStageScroll * 0.7) {
+						newStage = 2;
+					} else if (currentScroll > firstStageScroll * 0.7) {
+						newStage = 1;
+					} else {
+						newStage = 0;
+					}
 				}
 			}
 
@@ -157,13 +193,31 @@
 
 		&.stage-one {
 			.papir-content {
-				transform: translateX(-30vw);
+				@media (max-width: 768px) {
+					transform: translateX(-20vw);
+				}
+				@media (min-width: 769px) {
+					transform: translateX(-30vw);
+				}
 			}
 		}
 
 		&.stage-two {
 			.papir-content {
-				transform: translateX(-70vw);
+				@media (max-width: 768px) {
+					transform: translateX(-50vw);
+				}
+				@media (min-width: 769px) {
+					transform: translateX(-70vw);
+				}
+			}
+		}
+
+		&.stage-three {
+			.papir-content {
+				@media (max-width: 768px) {
+					transform: translateX(-80vw);
+				}
 			}
 		}
 
