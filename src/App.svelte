@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
-	import { papirStore, dispatchPapirEvent } from './lib/stores/papir';
+	import { papirStore, dispatchPapirEvent } from "./lib/stores/papir";
 	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	import { onMount } from "svelte";
@@ -33,9 +33,12 @@
 
 	let isPrinting = false;
 	let mounted = false;
-	
-	$: mainPapirState = $papirStore['main-papir'] || { isOpen: false, activeArtefact: null };
-	$: secondaryPapirState = $papirStore['secondary-papir'] || { isOpen: false, activeArtefact: null };
+
+	$: mainPapirState = $papirStore["main-papir"] || { isOpen: false, activeArtefact: null };
+	$: secondaryPapirState = $papirStore["secondary-papir"] || {
+		isOpen: false,
+		activeArtefact: null,
+	};
 	$: isOpen = mainPapirState.isOpen;
 
 	let isHovered = false;
@@ -57,27 +60,28 @@
 
 	function handlePapirStateChange(event: CustomEvent) {
 		const { action, papirId } = event.detail;
-		if (papirId === 'main-papir') {
-			if (action === 'hover') {
+		if (papirId === "main-papir") {
+			if (action === "hover") {
 				isHovered = true;
-			} else if (action === 'close') {
+			} else if (action === "close") {
 				isHovered = false;
 			}
 		}
 	}
 
 	function handleArtefactClick() {
-		dispatchPapirEvent('open', 'main-papir');
+		dispatchPapirEvent("open", "main-papir");
 	}
 
-
 	function handleArtefactReveal() {
-		dispatchPapirEvent('open', 'main-papir');
+		dispatchPapirEvent("open", "main-papir");
 	}
 
 	let invited = undefined;
-	const dial = (user: string, assistant: string) => (role = "assistant") =>
-		role == "assistant" ? assistant : user;
+	const dial =
+		(user: string, assistant: string) =>
+		(role = "assistant") =>
+			role == "assistant" ? assistant : user;
 	const dial1 = dial("user", "agent #1");
 	const dial2 = dial("user", "agent #2");
 
@@ -108,97 +112,91 @@
 </script>
 
 {#if mounted}
-	<div class="papir-container">
-		<Papir 
-			id="main-papir"
-			on:papirStateChange={handlePapirStateChange}
-		>
-			<div in:typewriter={{ speed: 50 }}>
-				<Scene prefix={"int."} where={"train car"} when={"future"} />
-			</div>
-			<Action value={loremIpsum("user").slice(0, -1) + "."} />
-			{#each $pre as message, i}
+	<!-- <div class="papir-container"> -->
+	<Papir id="main-papir" on:papirStateChange={handlePapirStateChange}>
+		<div in:typewriter={{ speed: 50 }}>
+			<Scene prefix={"int."} where={"train car"} when={"future"} />
+		</div>
+		<Action value={loremIpsum("user").slice(0, -1) + "."} />
+		{#each $pre as message, i}
+			<Dialogue
+				role={dial1(message.role)}
+				parenthetical={message.parenthetical}
+				markdown={message.content} />
+			{#if i == 0}
+				<Action>
+					<p class:isArtefact={true}>
+						The margin may contains artefacts, and is how users interact with the environment.
+					</p>
+					<aside slot="right">
+						<Artefact
+							icon={thinkIcon}
+							url="https://appar.at/dW7ve232/1dkw2h"
+							id="think-artefact"
+							papirId="main-papir"
+							size={50}
+							alt="Think artefact"
+							on:hover={() => console.log("hover")}
+							on:peak={() => console.log("peak")}
+							on:reveal={handleArtefactReveal} />
+					</aside>
+				</Action>
+			{/if}
+
+			{#if i == 2 && invited != false}
+				<Transition>
+					{#key invited}
+						<p in:typewriter={{ speed: 50, prefill: true }}>
+							{#if invited == undefined}
+								invite <b>{dial2()}</b>
+								?
+							{:else if invited}
+								enter {dial2()}:
+							{/if}
+						</p>
+					{/key}
+					<aside slot="right">
+						<p>
+							{#if invited == undefined}
+								<a href="#yes" on:click={() => (invited = true)}>YES</a>
+								<a href="#no" on:click={() => (invited = false)}>NO</a>
+							{/if}
+						</p>
+					</aside>
+				</Transition>
+			{/if}
+		{/each}
+		{#if invited}
+			<div in:fade={{ duration: 200 }}>
 				<Dialogue
-					role={dial1(message.role)}
-					parenthetical={message.parenthetical}
-					markdown={message.content} />
-				{#if i == 0}
-					<Action>
-						<p>The margin may contains artefacts, and is how users interact with the environment.</p>
-						<aside slot="right">
-							<Artefact
-								icon={thinkIcon}
-								url="https://appar.at/dW7ve232/1dkw2h"
-								id="think-artefact"
-								papirId="main-papir"
-								size={50}
-								alt="Think artefact"
-								on:hover={() => console.log("hover")}
-								on:peak={() => console.log("peak")}
-								on:reveal={handleArtefactReveal} />
-						</aside>
-					</Action>
-				{/if}
-
-				{#if i == 2 && invited != false}
-					<Transition>
-						{#key invited}
-							<p in:typewriter={{ speed: 50, prefill: true }}>
-								{#if invited == undefined}
-									invite <b>{dial2()}</b>
-									?
-								{:else if invited}
-									enter {dial2()}:
-								{/if}
-							</p>
-						{/key}
-						<aside slot="right">
-							<p>
-								{#if invited == undefined}
-									<a href="#yes" on:click={() => (invited = true)}>YES</a>
-									<a href="#no" on:click={() => (invited = false)}>NO</a>
-								{/if}
-							</p>
-						</aside>
-					</Transition>
-				{/if}
-			{/each}
-			{#if invited}
-				<div in:fade={{ duration: 200 }}>
+					markdown={"I will be trying to perform a very complex calculation on the data—"}
+					cont>
+					<span slot="role">{dial2()}</span>
+				</Dialogue>
+				<Dialogue markdown={"Processing input..."}>
+					<span slot="parenthetical">(thinking)</span>
+				</Dialogue>
+			</div>
+		{/if}
+		{#each $post as message, i}
+			<div in:fly={{ y: 20, duration: 200 }}>
+				<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
+			</div>
+		{/each}
+		{#if invited !== undefined}
+			{#key tail}
+				<div in:fade={{ duration: 200, delay: 200 }}>
 					<Dialogue
-						markdown={"I will be trying to perform a very complex calculation on the data—"}
-						cont>
-						<span slot="role">{dial2()}</span>
-					</Dialogue>
-					<Dialogue markdown={"Processing input..."}>
-						<span slot="parenthetical">(thinking)</span>
-					</Dialogue>
+						role={$tail.role}
+						bind:markdown={$tail.content}
+						on:shutter={() => (listening = true)}
+						prompt={!listening} />
 				</div>
-			{/if}
-			{#each $post as message, i}
-				<div in:fly={{ y: 20, duration: 200 }}>
-					<Dialogue role={message.role} markdown={message.content} parenthetical={"demo"} />
-				</div>
-			{/each}
-			{#if invited !== undefined}
-				{#key tail}
-					<div in:fade={{ duration: 200, delay: 200 }}>
-						<Dialogue
-							role={$tail.role}
-							bind:markdown={$tail.content}
-							on:shutter={() => (listening = true)}
-							prompt={!listening} />
-					</div>
-				{/key}
-			{/if}
-			<!-- <div slot="artifacts">
-				{#if mainPapirState.isOpen && !isHovered}
-
-				<Papir 
-				
-					id="secondary-papir"
-					on:papirStateChange={handlePapirStateChange}
-				>
+			{/key}
+		{/if}
+		<div slot="artifacts">
+			{#if mainPapirState.isOpen && !isHovered}
+				<Papir id="secondary-papir" on:papirStateChange={handlePapirStateChange}>
 					<div class="secondary-content">
 						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
 						<Action>
@@ -207,26 +205,20 @@
 					</div>
 				</Papir>
 			{/if}
-			</div> -->
+		</div>
 	</Papir>
 
-
-{#if mainPapirState.isOpen && !isHovered}
-
-<Papir 
-
-	id="secondary-papir"
-	on:papirStateChange={handlePapirStateChange}
->
-	<div class="secondary-content">
-		<Scene prefix={"int."} where={"secondary view"} when={"now"} />
-		<Action>
-			<p>This is additional content that appears after the hinge effect.</p>
-		</Action>
-	</div>
-</Papir>
-{/if}
-	</div>
+	<!-- {#if mainPapirState.isOpen && !isHovered}
+			<Papir id="secondary-papir" on:papirStateChange={handlePapirStateChange}>
+				<div class="secondary-content">
+					<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+					<Action>
+						<p>This is additional content that appears after the hinge effect.</p>
+					</Action>
+				</div>
+			</Papir>
+		{/if} -->
+	<!-- </div> -->
 {/if}
 
 <style global lang="scss">
@@ -270,12 +262,12 @@
 
 		@media print {
 			--sheet-width: 50vw;
-			--sheet-horizontal-padding: 5rem;
+			--sheet-horizontal-padding: 0;
 		}
 
 		@media (max-width: 768px) {
 			--sheet-width: 100vw;
-			--sheet-horizontal-padding: 5rem;
+			--sheet-horizontal-padding: 0;
 			--band-gap: 0.5rem;
 			--dialogue-width: 100%;
 		}
@@ -298,18 +290,26 @@
 		padding-top: 2rem;
 	}
 
-    .print-icon {
-        display: none;
-    }
-    
-    @media print {
-        .default-icon {
-            display: none;
-        }
-        .print-icon {
-            display: block;
-        }
-    }
+	.print-icon {
+		display: none;
+	}
+
+	p {
+		&.isArtefact {
+			@media (max-width: 768px) {
+				padding-right: 50px;
+			}
+		}
+	}
+
+	@media print {
+		.default-icon {
+			display: none;
+		}
+		.print-icon {
+			display: block;
+		}
+	}
 
 	.papir-container {
 		display: flex;
@@ -325,7 +325,11 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 </style>
