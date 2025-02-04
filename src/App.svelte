@@ -203,19 +203,9 @@
 						<Action>
 							<p class:isArtefact={true}>
 								This is additional content that appears after the hinge effect.
+								{loremIpsum("assistant")}
 							</p>
-							<aside slot="right">
-								<Artefact
-									icon={thinkIcon}
-									url="https://appar.at/dW7ve232/1dkw2h"
-									id="think-artefact"
-									papirId="secondary-papir"
-									size={50}
-									alt="Think artefact"
-									on:hover={() => console.log("hover")}
-									on:peak={() => console.log("peak")}
-									on:reveal={handleArtefactReveal} />
-							</aside>
+							
 						</Action>
 					</div>
 				</Papir>

@@ -6,19 +6,24 @@
 	const dispatch = createEventDispatcher();
 
 	export let id: string;
-	export let maxScroll = window.innerWidth * (window.innerWidth <= 768 ? 2 : 0.5);
+	export let firstStageScroll = window.innerWidth * 0.3;
+	export let secondStageScroll = window.innerWidth * 0.7;
 	export let swipeThreshold = window.innerWidth * 0.125;
 
 	const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
+	let currentStage = 0;
 
 	// Local reactive state that syncs with the store
 	$: state = $papirStore[id] || { isOpen: false, activeArtefact: null };
 	$: isOpen = state.isOpen;
 
-	function toggleOpen(value: boolean) {
+	function toggleOpen(value: boolean, stage: number = 1) {
 		papirStore.toggleOpen(id, value);
-		scrollLeft.set(value ? maxScroll : 0);
-		dispatch("papirStateChange", { isOpen: value });
+		currentStage = value ? stage : 0;
+		const targetScroll = currentStage === 2 ? secondStageScroll : 
+						   currentStage === 1 ? firstStageScroll : 0;
+		scrollLeft.set(targetScroll);
+		dispatch("papirStateChange", { isOpen: value, stage: currentStage });
 	}
 
 	// Handle global events
@@ -48,27 +53,49 @@
 		const touchStartHandler = (event: TouchEvent) => {
 			x1 = event.touches[0].clientX;
 			y1 = event.touches[0].clientY;
-			initialScrollLeft = event.currentTarget.scrollLeft;
+			initialScrollLeft = node.scrollLeft;
 			isSwipe = null;
 		};
 
 		const touchMoveHandler = (event: TouchEvent) => {
+			if (!x1) return;
 			xDiff = x1 - event.touches[0].clientX;
 			yDiff = y1 - event.touches[0].clientY;
-			isSwipe = isSwipe === null ? (Math.abs(yDiff) > 6 ? false : Math.abs(xDiff) > 8) : isSwipe;
+			isSwipe = isSwipe === null ? Math.abs(xDiff) > Math.abs(yDiff) : isSwipe;
 
 			if (isSwipe) {
 				node.classList.add("in-swipe");
-				scrollLeft.set(Math.min(initialScrollLeft + xDiff, maxScroll));
+				const newScroll = initialScrollLeft + xDiff;
+				
+				const maxScroll = currentStage === 1 ? firstStageScroll : secondStageScroll;
+				scrollLeft.set(Math.min(newScroll, maxScroll));
 			}
 		};
 
-		const touchEndHandler = (event: TouchEvent) => {
-			if (isSwipe) {
-				const swiped = Math.abs(xDiff) >= swipeThreshold;
-				toggleOpen(swiped ? xDiff > 0 : isOpen);
-				node.classList.remove("in-swipe");
+		const touchEndHandler = () => {
+			if (!isSwipe) return;
+			
+			const currentScroll = node.scrollLeft;
+			let newStage = currentStage;
+
+			if (Math.abs(xDiff) > swipeThreshold) {
+				if (xDiff > 0) {
+					newStage = currentStage < 2 ? currentStage + 1 : 2;
+				} else {
+					newStage = currentStage > 0 ? currentStage - 1 : 0;
+				}
+			} else {
+				if (currentScroll > secondStageScroll * 0.7) {
+					newStage = 2;
+				} else if (currentScroll > firstStageScroll * 0.7) {
+					newStage = 1;
+				} else {
+					newStage = 0;
+				}
 			}
+
+			toggleOpen(newStage > 0, newStage);
+			node.classList.remove("in-swipe");
 		};
 
 		node.addEventListener("touchstart", touchStartHandler, { passive: true });
@@ -97,6 +124,8 @@
 <div
 	class="papir-container"
 	class:opened={isOpen}
+	class:stage-one={currentStage === 1}
+	class:stage-two={currentStage === 2}
 	use:handleSwipe
 	on:mouseenter={handleMouseEnter}
 	on:mouseleave={handleMouseLeave}>
@@ -126,7 +155,18 @@
 			overflow-y: hidden;
 		}
 
-		//after swipe
+		&.stage-one {
+			.papir-content {
+				transform: translateX(-30vw);
+			}
+		}
+
+		&.stage-two {
+			.papir-content {
+				transform: translateX(-70vw);
+			}
+		}
+
 		/* &:not(.in-swipe).opened :global(.primary) {
 		opacity: 1;
 	} */
@@ -147,6 +187,7 @@
 		display: flex;
 		justify-content: center;
 		margin-bottom: 50rem !important;
+		transition: transform 0.3s ease-out;
 
 		@media (max-width: 768px) {
 			min-width: 200%;
