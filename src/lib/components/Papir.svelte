@@ -6,7 +6,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let id: string;
-	export let maxScroll = window.innerWidth * 2;
+	export let maxScroll = window.innerWidth * (window.innerWidth <= 768 ? 2 : 0.5);
 	export let swipeThreshold = window.innerWidth * 0.125;
 
 	const scrollLeft = spring(0, { stiffness: 0.25, damping: 1 });
@@ -112,7 +112,7 @@
 
 <style lang="scss">
 	.papir-container {
-		width: 100vw;
+		width: 100%;
 		height: 100vh;
 		overflow-x: hidden;
 		overflow-y: scroll;
