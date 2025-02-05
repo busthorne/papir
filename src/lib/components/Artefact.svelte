@@ -12,7 +12,7 @@
 	export let papirId: string;
 	export let size: number = 24;
 	export let logoSize: number = 30;
-	export let errorCorrectionLevel: string = "H";
+	export let errorCorrectionLevel: "L" | "M" | "Q" | "H" = "H";
 	export let alt: string = "Artefact icon";
 
 	// Визначаємо, чи icon є строкою (шлях до зображення) чи компонентом
