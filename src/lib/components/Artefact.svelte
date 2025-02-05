@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PrintableIcon from "./artefacts/PrintableIcon.svelte";
 	import { createEventDispatcher } from "svelte";
+	import { papirStore } from '../stores/papir';
 	import type { SvelteComponent } from "svelte";
 
 	const dispatch = createEventDispatcher();
@@ -8,11 +9,15 @@
 	export let id: string = "";
 	export let url: string = "";
 	export let icon: string | typeof SvelteComponent;
+	export let papirId: string;
 	export let size: number = 24;
+	export let logoSize: number = 30;
+	export let errorCorrectionLevel: "L" | "M" | "Q" | "H" = "H";
 	export let alt: string = "Artefact icon";
 
 	// Визначаємо, чи icon є строкою (шлях до зображення) чи компонентом
 	$: isIconString = typeof icon === "string";
+	$: isOpen = $papirStore[papirId]?.isOpen || false;
 
 	function handlePeak(event: MouseEvent) {
 		dispatch("peak", { event });
@@ -23,15 +28,15 @@
 	}
 
 	function handleReveal(event: MouseEvent) {
-		dispatch("reveal", { event });
+		dispatch("reveal", { event, isOpen });
 	}
 </script>
 
-<PrintableIcon {id} {url}>
+<PrintableIcon {id} {url} size={size} logoSize={logoSize} errorCorrectionLevel={errorCorrectionLevel}>
 	{#if isIconString}
 		<img
 			src={String(icon)}
-			{alt}
+			alt={alt}
 			width={size}
 			height={size}
 			on:mouseover={handleHover}

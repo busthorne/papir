@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
+	import { papirStore, dispatchPapirEvent } from "./lib/stores/papir";
 	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	import { onMount } from "svelte";
@@ -32,26 +33,52 @@
 
 	let isPrinting = false;
 	let mounted = false;
+
+	$: mainPapirState = $papirStore["main-papir"] || { isOpen: false, activeArtefact: null };
+	$: secondaryPapirState = $papirStore["secondary-papir"] || {
+		isOpen: false,
+		activeArtefact: null,
+	};
+	$: isOpen = mainPapirState.isOpen;
+
+	let isHovered = false;
+
 	onMount(() => {
 		mounted = true;
 		const mediaQueryList = window.matchMedia("print");
 
-		// Функція-обробник зміни стану
 		const handlePrintChange = (e: MediaQueryListEvent) => {
 			isPrinting = e.matches;
 		};
 
-		// Додаємо слухача подій
 		mediaQueryList.addEventListener("change", handlePrintChange);
 
-		// Прибираємо слухача при знищенні компонента
 		return () => {
 			mediaQueryList.removeEventListener("change", handlePrintChange);
 		};
 	});
 
-	let invited = undefined;
+	function handlePapirStateChange(event: CustomEvent) {
+		const { action, papirId } = event.detail;
+		if (papirId === "main-papir") {
+			if (action === "hover") {
+				isHovered = true;
+			} else if (action === "close") {
+				isHovered = false;
+			}
+		}
+	}
 
+	function handleArtefactClick() {
+		dispatchPapirEvent("open", "main-papir");
+	}
+
+	function handleArtefactReveal(event: CustomEvent) {
+		const { isOpen } = event.detail;		
+		dispatchPapirEvent(isOpen ? "close" : "open", "main-papir");
+	}
+
+	let invited = undefined;
 	const dial =
 		(user: string, assistant: string) =>
 		(role = "assistant") =>
@@ -86,7 +113,8 @@
 </script>
 
 {#if mounted}
-	<Papir>
+	<!-- <div class="papir-container"> -->
+	<Papir id="main-papir" on:papirStateChange={handlePapirStateChange}>
 		<div in:typewriter={{ speed: 50 }}>
 			<Scene prefix={"int."} where={"train car"} when={"future"} />
 		</div>
@@ -98,17 +126,20 @@
 				markdown={message.content} />
 			{#if i == 0}
 				<Action>
-					<p>The margin may contains artefacts, and is how users interact with the environment.</p>
+					<p class:isArtefact={true}>
+						The margin may contains artefacts, and is how users interact with the environment.
+					</p>
 					<aside slot="right">
 						<Artefact
 							icon={thinkIcon}
-							url="https://example.com"
+							url="https://appar.at/dW7ve232/1dkw2h"
 							id="think-artefact"
+							papirId="main-papir"
 							size={50}
 							alt="Think artefact"
 							on:hover={() => console.log("hover")}
 							on:peak={() => console.log("peak")}
-							on:reveal={() => console.log("reveal")} />
+							on:reveal={handleArtefactReveal} />
 					</aside>
 				</Action>
 			{/if}
@@ -164,7 +195,39 @@
 				</div>
 			{/key}
 		{/if}
+		<div slot="artifacts">
+			{#if mainPapirState.isOpen && !isHovered}
+				<!-- <Papir id="secondary-papir"> -->
+					<div class="secondary-content">
+						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+						<Action>
+							<p class:isArtefact={true}>
+								This is additional content that appears after the hinge effect.
+								{loremIpsum("assistant")}
+							</p>
+							
+						</Action>
+					</div>
+				<!-- </Papir> -->
+			{/if}
+		</div>
 	</Papir>
+
+	{#if mainPapirState.isOpen && !isHovered}
+		<!-- <Papir 
+
+	id="secondary-papir"
+	on:papirStateChange={handlePapirStateChange}
+>
+	<div class="secondary-content">
+		<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+		<Action>
+			<p>This is additional content that appears after the hinge effect.</p>
+		</Action>
+	</div>
+</Papir> -->
+	{/if}
+	<!-- </div> -->
 {/if}
 
 <style global lang="scss">
@@ -206,10 +269,15 @@
 			--sheet-width: 95vw;
 		}
 
+		@media print {
+			--sheet-width: 50vw;
+			--sheet-horizontal-padding: 0;
+		}
+
 		@media (max-width: 768px) {
 			--sheet-width: 100vw;
-			//--sheet-horizontal-padding: 2rem;
-			--band-gap: 1rem;
+			--sheet-horizontal-padding: 0;
+			--band-gap: 0.5rem;
 			--dialogue-width: 100%;
 		}
 	}
@@ -231,16 +299,46 @@
 		padding-top: 2rem;
 	}
 
-    .print-icon {
-        display: none;
-    }
-    
-    @media print {
-        .default-icon {
-            display: none;
-        }
-        .print-icon {
-            display: block;
-        }
-    }
+	.print-icon {
+		display: none;
+	}
+
+	p {
+		&.isArtefact {
+			@media (max-width: 768px) {
+				padding-right: 50px;
+			}
+		}
+	}
+
+	@media print {
+		.default-icon {
+			display: none;
+		}
+		.print-icon {
+			display: block;
+		}
+	}
+
+	.papir-container {
+		display: flex;
+		width: 100%;
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	.secondary-content {
+		opacity: 0;
+		animation: fadeIn 0.3s forwards;
+		animation-delay: 0.3s; // Delay until after hinge animation
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 </style>
