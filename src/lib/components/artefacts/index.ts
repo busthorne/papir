@@ -1,3 +1,3 @@
-export { default as PrintableIcon } from './base/PrintableIcon.svelte';
-export { default as PrintableArtefact } from './base/PrintableArtefact.svelte';
-export { default as ThinkArtefact } from './types/think/ThinkArtefact.svelte';
+export { default as PrintableIcon } from './PrintableIcon.svelte';
+export { default as PrintableArtefact } from './PrintableArtefact.svelte';
+export { default as ThinkArtefact } from './ThinkArtefact.svelte';
