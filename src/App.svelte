@@ -196,7 +196,7 @@
 			{/key}
 		{/if}
 		<div slot="artifacts">
-			{#if mainPapirState.isOpen && !isHovered}
+			
 				<!-- <Papir id="secondary-papir"> -->
 					<div class="secondary-content">
 						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
@@ -209,7 +209,7 @@
 						</Action>
 					</div>
 				<!-- </Papir> -->
-			{/if}
+
 		</div>
 	</Papir>
 

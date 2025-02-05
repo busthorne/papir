@@ -6,7 +6,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let id: string;
-	
+
 	// Додаємо реактивні змінні для різних розмірів екрану
 	$: isMobile = window.innerWidth <= 768;
 	$: maxStages = isMobile ? 3 : 2;
@@ -32,12 +32,15 @@
 	}
 
 	function getTargetScroll(stage: number): number {
-		switch(stage) {
-			case 3: return thirdStageScroll;
-			case 2: return secondStageScroll;
-			case 1: return firstStageScroll;
-			default: return 0;
-
+		switch (stage) {
+			case 3:
+				return thirdStageScroll;
+			case 2:
+				return secondStageScroll;
+			case 1:
+				return firstStageScroll;
+			default:
+				return 0;
 		}
 	}
 
@@ -46,14 +49,13 @@
 		if (isMobile && stage === 1) {
 			currentStage = value ? 1 : 2;
 		} else {
-			currentStage = value ? 1 : 0;			
+			currentStage = value ? 1 : 0;
 		}
 		console.log(currentStage);
-		
+
 		const targetScroll = getTargetScroll(currentStage);
 		scrollLeft.set(targetScroll);
 		dispatch("papirStateChange", { isOpen: value, stage: currentStage });
-
 	}
 
 	// Handle global events
@@ -64,15 +66,14 @@
 		}
 	}
 
-
 	onMount(() => {
-		window.addEventListener('resize', handleResize);
+		window.addEventListener("resize", handleResize);
 		papirStore.register(id);
 		window.addEventListener("papir-action", handlePapirAction as EventListener);
 	});
 
 	onDestroy(() => {
-		window.removeEventListener('resize', handleResize);
+		window.removeEventListener("resize", handleResize);
 		papirStore.unregister(id);
 		window.removeEventListener("papir-action", handlePapirAction as EventListener);
 	});
@@ -99,7 +100,7 @@
 			if (isSwipe) {
 				node.classList.add("in-swipe");
 				const newScroll = initialScrollLeft + xDiff;
-				
+
 				const maxScroll = currentStage === 1 ? firstStageScroll : secondStageScroll;
 				scrollLeft.set(Math.min(newScroll, maxScroll));
 			}
@@ -107,7 +108,7 @@
 
 		const touchEndHandler = () => {
 			if (!isSwipe) return;
-			
+
 			const currentScroll = node.scrollLeft;
 			let newStage = currentStage;
 
@@ -179,13 +180,10 @@
 			<slot />
 		</div>
 		<div class="papir secondary">
-				{#if (currentStage=== 2) || !isMobile && currentStage === 1}
-					<slot name="artifacts" />
-				{/if}
-			</div>
-
-
-
+			{#if (isMobile && currentStage === 2) || (!isMobile && currentStage === 1)}
+				<slot name="artifacts" />
+			{/if}
+		</div>
 	</div>
 </div>
 
