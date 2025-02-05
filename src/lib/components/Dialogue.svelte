@@ -6,9 +6,11 @@
 	export let markdown = "";
 	export let prompt = false;
 	export let cont = false;
+	export let id: string = "";
 </script>
 
-<section class="dialogue" class:prompt class:cont>
+
+<section class="dialogue" class:prompt class:cont id={id}>
 	<article>
 		<div class="role" {role}>
 			<slot name="role">

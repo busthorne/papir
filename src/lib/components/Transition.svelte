@@ -1,8 +1,9 @@
 <script lang="ts">
 	export let to = "";
+	export let id: string = "";
 </script>
 
-<section class="transition">
+<section class="transition" id={id}>
 	<article>
 		<slot>
 			<p>{to}</p>
