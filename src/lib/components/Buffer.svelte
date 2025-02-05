@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Plugin, KeyboardShortcut } from "carta-md";
 	import { Carta, Markdown, MarkdownEditor } from "carta-md";
+	import { math } from '@cartamd/plugin-math';
+	import { code } from '@cartamd/plugin-code';
 	import DOMPurify from "isomorphic-dompurify";
 	import { createEventDispatcher } from "svelte";
 	const dispatch = createEventDispatcher();
@@ -29,7 +31,7 @@
 		sanitizer: DOMPurify.sanitize,
 		disablePrefixes: true,
 		disableTabOuts: true,
-		extensions: [shortcuts()],
+		extensions: [shortcuts(), math(), code()],
 	});
 
 	export let markdown: string = "";
