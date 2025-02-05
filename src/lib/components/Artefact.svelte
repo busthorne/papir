@@ -11,6 +11,8 @@
 	export let icon: string | typeof SvelteComponent;
 	export let papirId: string;
 	export let size: number = 24;
+	export let logoSize: number = 30;
+	export let errorCorrectionLevel: string = "H";
 	export let alt: string = "Artefact icon";
 
 	// Визначаємо, чи icon є строкою (шлях до зображення) чи компонентом
@@ -30,11 +32,11 @@
 	}
 </script>
 
-<PrintableIcon {id} {url}>
+<PrintableIcon {id} {url} size={size} logoSize={logoSize} errorCorrectionLevel={errorCorrectionLevel}>
 	{#if isIconString}
 		<img
 			src={String(icon)}
-			{alt}
+			alt={alt}
 			width={size}
 			height={size}
 			on:mouseover={handleHover}

@@ -4,6 +4,10 @@
 
 	export let id: string = "";
 	export let url: string = "";
+	export let size: number = 60;
+	export let logoSize: number = 30;
+	export let errorCorrectionLevel: "L" | "M" | "Q" | "H" = "H";
+
 
 	let iconElement: HTMLElement;
 	let logoImage: string = "";
@@ -34,10 +38,10 @@
 				{#if qrReady}
 					<QRCode
 						data={url}
-						size={60}
+						size={size}
 						logoInBase64={logoImage}
-						logoSize={30}
-						errorCorrectionLevel="H" />
+						logoSize={logoSize}
+						errorCorrectionLevel={errorCorrectionLevel} />
 				{/if}
 			</div>
 		</span>
