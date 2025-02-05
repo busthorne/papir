@@ -1,6 +1,6 @@
 {
 	"name": "@busthorne/papir",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Dramaturgy design system for Svelte",
 	"type": "module",
 	"files": [
@@ -62,5 +62,10 @@
 	"homepage": "https://github.com/busthorne/papir",
 	"publishConfig": {
 		"access": "public"
+	},
+	"dependencies": {
+		"@cartamd/plugin-code": "^4.0.6",
+		"@cartamd/plugin-component": "^1.0.2",
+		"@cartamd/plugin-math": "^4.2.1"
 	}
 }
