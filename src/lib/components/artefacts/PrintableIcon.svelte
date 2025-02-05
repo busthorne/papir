@@ -55,6 +55,8 @@
 <style lang="scss">
 	.print-icon {
 		display: none;
+		position: relative;
+		right: 5rem;
 	}
 
 	.default-icon {
@@ -64,6 +66,7 @@
 	@media print {
 		.default-icon {
 			display: none;
+			
 		}
 		.print-icon {
 			display: block;
