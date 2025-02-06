@@ -2,9 +2,11 @@
 	export let prefix: string;
 	export let where: string;
 	export let when: string;
+	export let id: string = "";
+
 </script>
 
-<section class="scene">
+<section class="scene" id={id}>
 	<slot name="left" />
 	<article>
 		<h1>

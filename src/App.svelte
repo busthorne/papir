@@ -125,7 +125,7 @@
 				parenthetical={message.parenthetical}
 				markdown={message.content} />
 			{#if i == 0}
-				<Action>
+				<Action id='action-01'>
 					<p class:isArtefact={true}>
 						The margin may contains artefacts, and is how users interact with the environment.
 					</p>
@@ -323,7 +323,7 @@
 	.papir-container {
 		display: flex;
 		width: 100%;
-		height: 100vh;
+		// height: 100vh;
 		overflow: hidden;
 	}
 

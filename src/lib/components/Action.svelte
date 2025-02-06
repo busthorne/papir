@@ -1,9 +1,11 @@
 <script lang="ts">
 	import Buffer from "./Buffer.svelte";
 	export let value = "";
+	export let id: string = "";
 </script>
 
-<section class="action">
+
+<section class="action" id={id}>
 	<article>
 		{#if value}
 			<Buffer bind:markdown={value} />
