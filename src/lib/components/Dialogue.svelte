@@ -9,8 +9,7 @@
 	export let id: string = "";
 </script>
 
-
-<section class="dialogue" class:prompt class:cont id={id}>
+<section class="dialogue" class:prompt class:cont {id}>
 	<article>
 		<div class="role" {role}>
 			<slot name="role">
@@ -24,7 +23,7 @@
 		</div>
 		<div class="line">
 			<slot name="buffer">
-				<Buffer bind:markdown {prompt} on:shutter />
+				<Buffer {markdown} {prompt} on:shutter />
 			</slot>
 		</div>
 	</article>
@@ -105,7 +104,7 @@
 		}
 
 		:global(p) {
-			margin-bottom: 37px !important;
+			margin-bottom: 37px;
 			font-size: 15px;
 			line-height: 19px;
 

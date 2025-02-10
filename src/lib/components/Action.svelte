@@ -4,8 +4,7 @@
 	export let id: string = "";
 </script>
 
-
-<section class="action" id={id}>
+<section class="action" {id}>
 	<article>
 		{#if value}
 			<Buffer bind:markdown={value} />

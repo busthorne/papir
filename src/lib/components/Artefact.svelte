@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PrintableIcon from "./artefacts/PrintableIcon.svelte";
 	import { createEventDispatcher } from "svelte";
-	import { papirStore } from '../stores/papir';
+	import { papirStore } from "../stores/papir";
 	import type { SvelteComponent } from "svelte";
 
 	const dispatch = createEventDispatcher();
@@ -32,11 +32,11 @@
 	}
 </script>
 
-<PrintableIcon {id} {url} size={size} logoSize={logoSize} errorCorrectionLevel={errorCorrectionLevel}>
+<PrintableIcon {id} {url} {size} {logoSize} {errorCorrectionLevel}>
 	{#if isIconString}
 		<img
 			src={String(icon)}
-			alt={alt}
+			{alt}
 			width={size}
 			height={size}
 			on:mouseover={handleHover}

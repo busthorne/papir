@@ -3,10 +3,9 @@
 	export let where: string;
 	export let when: string;
 	export let id: string = "";
-
 </script>
 
-<section class="scene" id={id}>
+<section class="scene" {id}>
 	<slot name="left" />
 	<article>
 		<h1>

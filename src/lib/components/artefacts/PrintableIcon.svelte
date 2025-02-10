@@ -8,7 +8,6 @@
 	export let logoSize: number = 30;
 	export let errorCorrectionLevel: "L" | "M" | "Q" | "H" = "H";
 
-
 	let iconElement: HTMLElement;
 	let logoImage: string = "";
 	let qrReady = false;
@@ -36,12 +35,7 @@
 		<span class="print-icon">
 			<div class="qr-container">
 				{#if qrReady}
-					<QRCode
-						data={url}
-						size={size}
-						logoInBase64={logoImage}
-						logoSize={logoSize}
-						errorCorrectionLevel={errorCorrectionLevel} />
+					<QRCode data={url} {size} logoInBase64={logoImage} {logoSize} {errorCorrectionLevel} />
 				{/if}
 			</div>
 		</span>
@@ -70,7 +64,6 @@
 	@media print {
 		.default-icon {
 			display: none;
-			
 		}
 		.print-icon {
 			display: block;

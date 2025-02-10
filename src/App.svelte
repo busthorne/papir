@@ -1,26 +1,16 @@
 <script lang="ts">
-	import { Papir, Dialogue, Scene, Action, Transition, Buffer, Artefact } from "./lib";
-	import { papirStore, dispatchPapirEvent } from "./lib/stores/papir";
-	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
+	import type { Message } from "./types";
 
+	import { Papir, Dialogue, Scene, Action, Transition, Artefact } from "./lib";
+	import { papirStore, dispatchPapirEvent } from "./lib/stores/papir";
 	import { onMount } from "svelte";
 	import { fade, fly } from "svelte/transition";
-	import { cubicIn } from "svelte/easing";
-	import "@ibm/plex/css/ibm-plex.css";
 	import { demo, loremIpsum } from "./mock";
 	import { script, improv } from "./stores";
-	import type { Message } from "./types";
 	import { typewriter } from "./lib/typewriter";
 
-	import { RiShapesFill } from "svelte-remixicon";
-	import { Markdown } from "carta-md";
-	import {
-		PrintableIcon,
-		PrintableArtefact,
-		ThinkArtefact,
-	} from "./lib/components/artefacts/index";
-	// import PrintableArtefact from './lib/components/artefacts/PrintableArtefact.svelte';
-	// import thinkArtefact from './lib/components/artefacts/assets/think_artefact.png';
+	import "@ibm/plex/css/ibm-plex.css";
+	import thinkIcon from "./lib/components/artefacts/assets/think_artefact.png";
 
 	const empty = (role: string): Message => ({
 		role: role,
@@ -74,7 +64,7 @@
 	}
 
 	function handleArtefactReveal(event: CustomEvent) {
-		const { isOpen } = event.detail;		
+		const { isOpen } = event.detail;
 		dispatchPapirEvent(isOpen ? "close" : "open", "main-papir");
 	}
 
@@ -99,17 +89,21 @@
 			);
 		}
 	}
-	async function send() {
+	async function send(e: CustomEvent) {
+		const prompt = e.detail.markdown;
+		if (prompt === "") return e.preventDefault();
+		console.log(prompt);
+		tail.update((p) => ({ ...p, content: prompt }));
 		post.append($tail);
+		listening = true;
 		tail = improv(empty("assistant"));
 		await simulateTyping();
 		post.append($tail);
 		tail = improv(empty("user"));
 		listening = false;
 	}
-	// TODO: event handler hangs the reactivity, `send` should be some kind of signal, I guess?
+
 	let listening = false;
-	$: if (listening) send();
 </script>
 
 {#if mounted}
@@ -125,7 +119,7 @@
 				parenthetical={message.parenthetical}
 				markdown={message.content} />
 			{#if i == 0}
-				<Action id='action-01'>
+				<Action id="action-01">
 					<p class:isArtefact={true}>
 						The margin may contains artefacts, and is how users interact with the environment.
 					</p>
@@ -189,27 +183,24 @@
 				<div in:fade={{ duration: 200, delay: 200 }}>
 					<Dialogue
 						role={$tail.role}
-						bind:markdown={$tail.content}
-						on:shutter={() => (listening = true)}
+						markdown={$tail.content}
+						on:shutter={send}
 						prompt={!listening} />
 				</div>
 			{/key}
 		{/if}
 		<div slot="artifacts">
-			
-				<!-- <Papir id="secondary-papir"> -->
-					<div class="secondary-content">
-						<Scene prefix={"int."} where={"secondary view"} when={"now"} />
-						<Action>
-							<p class:isArtefact={true}>
-								This is additional content that appears after the hinge effect.
-								{loremIpsum("assistant")}
-							</p>
-							
-						</Action>
-					</div>
-				<!-- </Papir> -->
-
+			<!-- <Papir id="secondary-papir"> -->
+			<div class="secondary-content">
+				<Scene prefix={"int."} where={"secondary view"} when={"now"} />
+				<Action>
+					<p class:isArtefact={true}>
+						This is additional content that appears after the hinge effect.
+						{loremIpsum("assistant")}
+					</p>
+				</Action>
+			</div>
+			<!-- </Papir> -->
 		</div>
 	</Papir>
 
@@ -297,6 +288,7 @@
 	}
 	.papir {
 		padding-top: 2rem;
+		margin-bottom: 30vh;
 	}
 
 	.print-icon {

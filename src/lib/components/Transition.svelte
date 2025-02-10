@@ -3,7 +3,7 @@
 	export let id: string = "";
 </script>
 
-<section class="transition" id={id}>
+<section class="transition" {id}>
 	<article>
 		<slot>
 			<p>{to}</p>

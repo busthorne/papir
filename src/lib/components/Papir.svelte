@@ -252,7 +252,6 @@
 		height: auto;
 		display: flex;
 		justify-content: center;
-		margin-bottom: 50rem !important;
 		transition: transform 0.3s ease-out;
 
 		@media (max-width: 768px) {
