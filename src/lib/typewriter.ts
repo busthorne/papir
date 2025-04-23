@@ -1,4 +1,4 @@
-export const typewriter = (node: HTMLElement, { speed = 50, prefill = false }) => {
+export const typewriter = (node: HTMLElement, { speed = 50, prefill = true }) => {
 	const targets = flattext(node);
 	if (!targets) {
 		throw new Error(`This transition only works on elements with text nodes`);

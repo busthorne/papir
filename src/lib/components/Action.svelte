@@ -17,17 +17,6 @@
 
 <style lang="scss">
 	.action {
-		margin-bottom: 37px;
-
-		:global(p) {
-			font-size: 16px;
-			line-height: 26px;
-			font-weight: 400;
-
-			@media (max-width: 768px) {
-				font-size: 13px;
-				line-height: 22px;
-			}
-		}
+		margin-bottom: 10px;
 	}
 </style>

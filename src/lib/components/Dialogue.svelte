@@ -31,7 +31,7 @@
 </section>
 
 <style lang="scss">
-	.dialogue-container {
+	.dialogue {
 		margin: 2rem 0;
 	}
 	article {
@@ -58,9 +58,8 @@
 		grid-column: dialogue;
 		font-weight: 700;
 		text-transform: uppercase;
-		font-size: 18px;
+		font-size: var(--print-size);
 		padding-left: 10rem;
-		margin-bottom: 14px;
 
 		@media (max-width: 768px) {
 			font-size: 14px;
@@ -72,8 +71,7 @@
 		grid-column: dialogue;
 		color: #666;
 		padding-left: 7rem;
-		margin-bottom: 14px;
-		font-size: 15px;
+		font-size: var(--print-size);
 		line-height: 19px;
 
 		&.noMargin {
@@ -87,6 +85,7 @@
 	}
 
 	.line {
+		margin-top: 14px;
 		grid-column: dialogue;
 		.prompt & {
 			border-radius: 4px;
@@ -101,17 +100,6 @@
 				15px 1px,
 				1px 15px,
 				1px 15px;
-		}
-
-		:global(p) {
-			margin-bottom: 37px;
-			font-size: 15px;
-			line-height: 19px;
-
-			@media (max-width: 768px) {
-				font-size: 12px;
-				line-height: 16px;
-			}
 		}
 	}
 </style>

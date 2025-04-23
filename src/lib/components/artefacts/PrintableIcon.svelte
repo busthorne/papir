@@ -54,7 +54,8 @@
 	.print-icon {
 		display: none;
 		position: relative;
-		right: 5rem;
+		top: 0.5rem;
+		// left: -g5rem;
 	}
 
 	.default-icon {

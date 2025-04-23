@@ -187,10 +187,138 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style global lang="scss">
+	:root {
+		--print: "IBM Plex Mono", monospace;
+		--print-size: 12px;
+		--sheet-width: 70vw;
+		--dialogue-width: 20vw;
+		--sheet-horizontal-padding: 0;
+		--leftband-width: 20vw;
+		--rightband-width: 0;
+		--band-gap: 5vw;
+
+		--border-color: #b9b9b9;
+		--selection-color: #b5f0ff3d;
+		--focus-outline: #222d36;
+		--hover-color: #e9e9e9;
+		--caret-color: #161616;
+		--text-color: #1a1a1a;
+		--border-color-dark: #4d4d4c;
+		--selection-color-dark: #b5f0ff3d;
+		--focus-outline-dark: #76bbf3;
+		--hover-color-dark: #4d4d4c;
+		--caret-color-dark: #ffffff;
+		--text-color-dark: #f1f1f1;
+
+		font-family: var(--print);
+		font-size: var(--print-size);
+
+		@media print {
+			.papir-container {
+				margin-left: 0;
+			}
+			--band-gap: 10vw;
+			--sheet-width: 100vw;
+			--dialogue-width: 50vw;
+			--leftband-width: 0;
+			--rightband-width: 0;
+			--sheet-horizontal-padding: 0;
+
+			.default-icon {
+				display: none;
+			}
+			.print-icon {
+				display: block;
+			}
+		}
+
+		@media (max-width: 1440px) {
+			--sheet-width: 100vw;
+		}
+
+		@media (max-width: 1200px) {
+			--sheet-width: 95vw;
+		}
+
+		@media (max-width: 1024px) {
+			--sheet-width: 85vw;
+			--dialogue-width: 45vw;
+			--leftband-width: 0;
+		}
+
+		@media (max-width: 768px) {
+			--sheet-width: 90vw;
+			--dialogue-width: 50vw;
+		}
+	}
+
+	:global(.action p) {
+		font-size: var(--print-size);
+		// line-height: 26px;
+		// font-weight: 400;
+
+		// @media (max-width: 768px) {
+		// 	font-size: 13px;
+		// 	line-height: 22px;
+		// }
+	}
+
+	.remixicon {
+		cursor: pointer;
+	}
+	a {
+		text-decoration: underline;
+		color: var(--text-color);
+	}
+
+	body {
+		// background: #f5f5f5;
+		// background: #fff;
+		margin: 0;
+	}
+	.papir {
+		padding-top: 2rem;
+		margin-bottom: 30vh;
+	}
+
+	.print-icon {
+		display: none;
+	}
+
+	p {
+		&.isArtefact {
+			// @media (max-width: 768px) {
+			// 	padding-right: 50px;
+			// }
+		}
+	}
+
+	.papir-container {
+		display: flex;
+		width: 100%;
+		margin-left: var(--band-gap);
+		overflow: hidden;
+	}
+
+	.secondary-content {
+		opacity: 0;
+		animation: fadeIn 0.3s forwards;
+		animation-delay: 0.3s; // Delay until after hinge animation
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
 	.papir-container {
 		width: 100%;
-		// height: 100vh;
+		height: 100%;
 		overflow-x: hidden;
 		overflow-y: scroll;
 		overscroll-behavior: none;
@@ -233,29 +361,29 @@
 			}
 		}
 
-		/* &:not(.in-swipe).opened :global(.primary) {
-		opacity: 1;
-	} */
+		&:not(.in-swipe).opened :global(.primary) {
+			opacity: 1;
+		}
 
-		/* &:not(.in-swipe).opened {
-
-	} */
-
-		/* &.opened :global(.secondary) {
-		//width: 30vw;
-		//padding: 2rem;
-	} */
+		&:not(.in-swipe).opened :global(.secondary) {
+			//width: 30vw;
+			//padding: 2rem;
+		}
+		&.opened :global(.secondary) {
+			//width: 30vw;
+			//padding: 2rem;
+		}
 	}
 
 	.papir-content {
-		min-width: 150%;
+		// min-width: 130%;
 		height: auto;
 		display: flex;
 		justify-content: center;
 		transition: transform 0.3s ease-out;
 
 		@media (max-width: 768px) {
-			min-width: 200%;
+			// min-width: 200%;
 		}
 	}
 
@@ -271,8 +399,8 @@
 		}
 
 		&.secondary {
-			//width: 30vw;
-			//padding: 2rem;
+			// width: 30vw;
+			// padding: 2rem;
 		}
 	}
 

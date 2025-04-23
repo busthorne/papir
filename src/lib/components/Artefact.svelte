@@ -55,7 +55,7 @@
 	:global(.artefact) {
 		cursor: pointer;
 		display: inline-flex;
-		align-items: center;
-		justify-content: center;
+		align-items: right;
+		justify-content: right;
 	}
 </style>
