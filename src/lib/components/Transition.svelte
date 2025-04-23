@@ -3,7 +3,7 @@
 	export let id: string = "";
 </script>
 
-<section class="transition" id={id}>
+<section class="transition" {id}>
 	<article>
 		<slot>
 			<p>{to}</p>
@@ -17,16 +17,16 @@
 		text-transform: uppercase;
 		text-align: right;
 
-		:global(p) {
-			margin-bottom: 37px;
-			font-size: 18px;
-			line-height: 23px;
-			font-weight: 400;
+		// :global(p) {
+		// 	margin-bottom: 37px;
+		// 	font-size: 18px;
+		// 	line-height: 23px;
+		// 	font-weight: 400;
 
-			@media (max-width: 768px) {
-				font-size: 14px;
-				line-height: 18px;
-			}
-		}
+		// 	@media (max-width: 768px) {
+		// 		font-size: 14px;
+		// 		line-height: 18px;
+		// 	}
+		// }
 	}
 </style>

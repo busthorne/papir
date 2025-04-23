@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { Plugin, KeyboardShortcut } from "carta-md";
+	import type { Plugin, KeyboardShortcut, InputEnhancer } from "carta-md";
 	import { Carta, Markdown, MarkdownEditor } from "carta-md";
-	import { math } from '@cartamd/plugin-math';
-	import { code } from '@cartamd/plugin-code';
+	import { math } from "@cartamd/plugin-math";
+	import { code } from "@cartamd/plugin-code";
 	import DOMPurify from "isomorphic-dompurify";
 	import { createEventDispatcher } from "svelte";
+
 	const dispatch = createEventDispatcher();
 
 	const enter: KeyboardShortcut = {
@@ -18,7 +19,11 @@
 	const shiftEnter: KeyboardShortcut = {
 		id: "submit",
 		combination: new Set(["enter"]),
-		action: (input) => dispatch("shutter", {}),
+		action: (input: InputEnhancer) => {
+			dispatch("shutter", {
+				markdown: input.textarea.value,
+			});
+		},
 	};
 
 	const shortcuts = (): Plugin => {
@@ -43,7 +48,6 @@
 	{#if prompt}
 		<MarkdownEditor
 			{carta}
-			bind:value={markdown}
 			mode={"tabs"}
 			{placeholder}
 			selectedTab={"write"}

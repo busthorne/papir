@@ -3,10 +3,9 @@
 	export let where: string;
 	export let when: string;
 	export let id: string = "";
-
 </script>
 
-<section class="scene" id={id}>
+<section class="scene" {id}>
 	<slot name="left" />
 	<article>
 		<h1>
@@ -26,11 +25,12 @@
 	.scene {
 		//height: 18px;
 		h1 {
-			font-size: 18px;
+			display: inline-block;
+			font-size: 14px;
 			font-weight: 600;
 			line-height: 23px;
 			text-transform: uppercase;
-			margin: 0 0 23px 0;
+			margin: 0 0 10px 0;
 
 			@media (max-width: 768px) {
 				font-size: 14px;
